@@ -1,0 +1,11 @@
+{
+  "sign_in": "Sign In",
+  "input_password": "Enter your password",
+  "input_email": "Enter your email address",
+  "forgot_password": "Forgot password",
+  "not_have_account": "Not have an account",
+  "reset_password": "Reset password",
+  "email_address": "Email address",
+  "sign_up": "Sign up",
+  "is_required": "is required"
+}
