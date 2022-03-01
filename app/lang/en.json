@@ -2,6 +2,8 @@
   "sign_in": "Sign In",
   "input_password": "Enter your password",
   "input_email": "Enter your email address",
+  "input_name": "Enter your name",
+  "input_address": "Enter your address",
   "forgot_password": "Forgot password",
   "not_have_account": "Not have an account",
   "reset_password": "Reset password",

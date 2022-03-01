@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Button,
   Header,
@@ -17,29 +17,24 @@ import {
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
-import {useForm, Controller} from 'react-hook-form';
+import {useForm, FormProvider} from 'react-hook-form';
 
 const SignIn = props => {
-  const {
-    handleSubmit,
-    control,
-    formState: {errors},
-  } = useForm();
+  const {...methods} = useForm({mode: 'onChange'});
   const navigation = useNavigation();
   const {t} = useTranslation();
   const {colors} = useTheme();
   const [loading, setLoading] = useState(false);
+  const email = useRef('');
+  const password = useRef('');
+
+  console.log(
+    'rendered: ' +
+      JSON.stringify({email: email.current, password: password.current}),
+  );
 
   const onSubmit = data => {
     console.log(data);
-  };
-
-  const onError = (errors, e) => {
-    return console.log(errors);
-  };
-
-  const onLogin = () => {
-    handleSubmit(onSubmit);
   };
 
   const offsetKeyboard = Platform.select({
@@ -60,53 +55,49 @@ const SignIn = props => {
           flex: 1,
         }}>
         <View style={styles.contain}>
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                label="Email"
-                style={[BaseStyle.textInput]}
-                onChangeText={onChange}
-                onFocus={() => {}}
-                onBlur={onBlur}
-                autoCorrect={false}
-                placeholder={t('input_email')}
-                placeholderTextColor={BaseColor.grayColor}
-                value={value}
-                selectionColor={colors.primary}
-                error={errors?.email?.message}
-              />
-            )}
-            name="email"
-            rules={{required: `Email ${t('is_required')}`}}
-          />
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                style={[BaseStyle.textInput, {marginTop: 10}]}
-                onChangeText={onChange}
-                onFocus={() => {}}
-                autoCorrect={false}
-                placeholder={t('input_password')}
-                secureTextEntry={true}
-                value={value}
-                selectionColor={colors.primary}
-                label={'Password'}
-                onBlur={onBlur}
-                error={errors?.password?.message}
-              />
-            )}
-            name="password"
-            rules={{required: `Password ${t('is_required')}`}}
-          />
+          <FormProvider {...methods}>
+            <TextInput
+              style={[BaseStyle.textInput]}
+              onFocus={() => {}}
+              autoCorrect={false}
+              placeholder={t('input_email')}
+              placeholderTextColor={BaseColor.grayColor}
+              selectionColor={colors.primary}
+              onChangeText={e => {
+                email.current = e;
+              }}
+              label="Email"
+              name="email"
+              rules={{
+                required: `Email ${t('is_required')}`,
+                pattern: {
+                  value: /\b[\w\\.+-]+@[\w\\.-]+\.\w{2,4}\b/,
+                  message: 'Must be formatted: john.doe@email.com',
+                },
+              }}
+            />
+            <TextInput
+              style={[BaseStyle.textInput, {marginTop: 10}]}
+              onFocus={() => {}}
+              autoCorrect={false}
+              placeholder={t('input_password')}
+              secureTextEntry={true}
+              selectionColor={colors.primary}
+              onChangeText={e => {
+                password.current = e;
+              }}
+              label="Password"
+              name="password"
+              rules={{required: `Password ${t('is_required')}`}}
+            />
+          </FormProvider>
 
           <View style={{width: '100%', marginVertical: 16}}>
             <Button
               full
               loading={loading}
               style={{marginTop: 20}}
-              onPress={handleSubmit(onSubmit)}>
+              onPress={methods.handleSubmit(onSubmit, error => console.log)}>
               {t('sign_in')}
             </Button>
           </View>

@@ -3,6 +3,7 @@ import {I18nManager, TextInput, View} from 'react-native';
 import {BaseColor, BaseStyle, useFont, useTheme} from '../../config';
 import PropTypes from 'prop-types';
 import {Text} from '../../components';
+import {useController, useFormContext} from 'react-hook-form';
 
 const Index = forwardRef((props, ref) => {
   const font = useFont();
@@ -10,8 +11,8 @@ const Index = forwardRef((props, ref) => {
   const cardColor = colors.card;
   const {
     style,
-    onChangeText,
-    onFocus,
+    onChangeText = () => {},
+    onFocus = () => {},
     placeholder,
     value,
     success,
@@ -20,17 +21,33 @@ const Index = forwardRef((props, ref) => {
     multiline,
     textAlignVertical,
     icon,
-    onSubmitEditing,
+    onSubmitEditing = () => {},
     inputStyle,
+    onBlur = () => {},
+    name,
     label,
-    error,
+    rules,
+    defaultValue,
     ...attrs
   } = props;
+
+  const formContext = useFormContext();
+  const {formState} = formContext;
+  const {field} = useController({name, rules, defaultValue});
+  const hasError = Boolean(formState?.errors[name]);
+
+  if (!formContext || !name) {
+    const msg = !formContext
+      ? 'TextInput must be wrapped by the FormProvider'
+      : 'Name must be defined';
+    console.error(msg);
+    return null;
+  }
 
   return (
     <View style={{marginBottom: 20}}>
       {label && (
-        <Text body2 regular grayColor>
+        <Text subhead bold grayColor>
           {label}
         </Text>
       )}
@@ -49,23 +66,34 @@ const Index = forwardRef((props, ref) => {
             },
             inputStyle,
           ]}
-          onChangeText={text => onChangeText(text)}
           onFocus={() => onFocus()}
           autoCorrect={false}
           placeholder={placeholder}
           placeholderTextColor={success ? BaseColor.grayColor : colors.primary}
           secureTextEntry={secureTextEntry}
-          value={value}
           selectionColor={colors.primary}
           keyboardType={keyboardType}
           multiline={multiline}
           textAlignVertical={textAlignVertical}
           onSubmitEditing={onSubmitEditing}
+          onChangeText={e => {
+            onChangeText(e);
+            field.onChange(e);
+          }}
+          onBlur={e => {
+            onBlur(e);
+            field.onBlur(e);
+          }}
+          value={field.value}
           {...attrs}
         />
         {icon}
       </View>
-      {error && <Text style={{color: BaseColor.pinkDarkColor}}>{error}</Text>}
+      {hasError && (
+        <Text style={{color: BaseColor.pinkDarkColor}}>
+          {formState.errors[name].message}
+        </Text>
+      )}
     </View>
   );
 });
