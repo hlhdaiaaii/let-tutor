@@ -18,6 +18,8 @@ import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {useForm, FormProvider} from 'react-hook-form';
+import {useStore} from '../../store';
+import {NavConfig} from '../../navigation/config';
 
 const SignIn = props => {
   const {...methods} = useForm({mode: 'onChange'});
@@ -27,14 +29,11 @@ const SignIn = props => {
   const [loading, setLoading] = useState(false);
   const email = useRef('');
   const password = useRef('');
-
-  console.log(
-    'rendered: ' +
-      JSON.stringify({email: email.current, password: password.current}),
-  );
+  const setIsLoggedIn = useStore(state => state.setIsLoggedIn);
 
   const onSubmit = data => {
     console.log(data);
+    setIsLoggedIn(true);
   };
 
   const offsetKeyboard = Platform.select({
@@ -97,19 +96,22 @@ const SignIn = props => {
               full
               loading={loading}
               style={{marginTop: 20}}
-              onPress={methods.handleSubmit(onSubmit, error => console.log)}>
+              onPress={methods.handleSubmit(onSubmit)}>
               {t('sign_in')}
             </Button>
           </View>
           <View style={styles.contentActionBottom}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('ResetPassword')}>
+              onPress={() =>
+                navigation.navigate(NavConfig.Screens.ForgotPassword)
+              }>
               <Text body2 grayColor>
                 {t('forgot_password')}
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(NavConfig.Screens.SignUp)}>
               <Text body2 primaryColor>
                 {t('not_have_account')}
               </Text>

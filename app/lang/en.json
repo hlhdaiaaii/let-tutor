@@ -9,5 +9,23 @@
   "reset_password": "Reset password",
   "email_address": "Email address",
   "sign_up": "Sign up",
-  "is_required": "is required"
+  "is_required": "is required",
+  "home": "Home",
+  "account": "Account",
+  "setting": "Setting",
+  "change_password": "Change password",
+  "edit_profile": "Edit profile",
+  "sign_out": "Sign out",
+  "edit_account": "Edit account",
+  "name": "Name",
+  "email": "Email",
+  "confirm": "Confirm",
+  "current_password": "Current password",
+  "new_password": "New password",
+  "confirm_password": "Confirm password",
+  "courses": "Courses",
+  "search_tutor": "Search tutors...",
+  "topics": "Topics",
+  "schedule": "Schedule"
+
 }

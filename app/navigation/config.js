@@ -1,9 +1,14 @@
 export const NavConfig = {
   Screens: {
     Home: 'Home',
+    Schedule: 'Schedule',
+    Courses: 'Courses',
     Login: 'Login',
-    ForgotPassword: 'ResetPassword',
-    SignUp: "SignUp"
+    ForgotPassword: 'ForgotPassword',
+    SignUp: 'SignUp',
+    Account: 'Account',
+    AccountEdit: 'AccountEdit',
+    ChangePassword: 'ChangePassword',
   },
   Stacks: {
     Auth: 'AuthStack',

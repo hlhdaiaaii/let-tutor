@@ -1,50 +1,110 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Login from '../screens/Login';
-import ResetPassword from '../screens/ResetPassword';
-// import Home from '../screens/Home';
-// import ForgotPassword from '../screens/ForgotPassword';
 import {StatusBar} from 'react-native';
 import {useStore} from '../store';
 import {NavConfig} from './config';
-import {initReactI18next} from 'react-i18next';
-import i18n from 'i18next';
-import {useDarkMode} from '../config';
-import SignUp from '../screens/SignUp';
+import {BaseColor, BaseStyle, useDarkMode, useTheme} from '../config';
+import {Icon} from '../components';
+import {useTranslation} from 'react-i18next';
+import {
+  Schedule,
+  Login,
+  SignUp,
+  Home,
+  ChangePassword,
+  AccountEdit,
+  Account,
+  Courses,
+  ForgotPassword,
+} from '../screens';
 
-const Stack = createStackNavigator();
+const Root = createStackNavigator();
 const AuthStack = createStackNavigator();
-const MainStack = createBottomTabNavigator();
+const MainTab = createBottomTabNavigator();
 
 const AuthNavigator = () => {
-  // const isLoggedIn = useStore(state => state.isLoggedIn);
-
   return (
     <AuthStack.Navigator screenOptions={{headerShown: false}}>
       <AuthStack.Screen name={NavConfig.Screens.Login} component={Login} />
       <AuthStack.Screen
         name={NavConfig.Screens.ForgotPassword}
-        component={ResetPassword}
+        component={ForgotPassword}
       />
-      <AuthStack.Screen
-        name={NavConfig.Screens.SignUp}
-        component={SignUp}
-      />
+      <AuthStack.Screen name={NavConfig.Screens.SignUp} component={SignUp} />
     </AuthStack.Navigator>
   );
 };
 
-// const MainNavigator = () => (
-//   <MainStack.Navigator screenOptions={{headerShown: false}}>
-//     <MainStack.Screen name="Home" component={Home} />
-//   </MainStack.Navigator>
-// );
+const MainTabNavigator = () => {
+  const {t} = useTranslation();
+  const {colors} = useTheme();
+
+  return (
+    <MainTab.Navigator
+      initialRouteName={NavConfig.Screens.Home}
+      tabBarOptions={{
+        showIcon: true,
+        showLabel: true,
+        activeTintColor: colors.primary,
+        inactiveTintColor: BaseColor.grayColor,
+        style: BaseStyle.tabBar,
+        labelStyle: {
+          fontSize: 12,
+        },
+      }}
+      screenOptions={{headerShown: false}}>
+      <MainTab.Screen
+        name={NavConfig.Screens.Home}
+        component={Home}
+        options={{
+          title: t('home'),
+          tabBarIcon: ({color}) => (
+            <Icon name="home" size={20} solid color={color} />
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name={NavConfig.Screens.Schedule}
+        component={Schedule}
+        options={{
+          title: t('schedule'),
+          tabBarIcon: ({color}) => (
+            <Icon name="calendar" size={20} solid color={color} />
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name={NavConfig.Screens.Courses}
+        component={Courses}
+        options={{
+          title: t('courses'),
+          tabBarIcon: ({color}) => (
+            <Icon name="book-open" size={20} solid color={color} />
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name={NavConfig.Screens.Account}
+        component={Account}
+        options={{
+          title: t('account'),
+          tabBarIcon: ({color}) => (
+            <Icon name="user-circle" size={20} solid color={color} />
+          ),
+        }}
+      />
+    </MainTab.Navigator>
+  );
+};
 
 export const Navigator = () => {
   const isLoggedIn = useStore(state => state.isLoggedIn);
-  const isDarkMode = useDarkMode();  
+  const isDarkMode = useDarkMode();
 
   useEffect(() => {
     // Config status bar
@@ -58,20 +118,32 @@ export const Navigator = () => {
     <NavigationContainer>
       <StatusBar barStyle="light-content" />
 
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name={NavConfig.Stacks.Auth} component={AuthNavigator} />
-        {/* {!isLoggedIn ? (
-          <Stack.Screen
-            name={NavConfig.Stacks.Auth}
-            component={AuthNavigator}
-          />
+      <Root.Navigator
+        screenOptions={{
+          headerShown: false,
+          cardStyleInterpolator:
+            CardStyleInterpolators.forRevealFromBottomAndroid,
+        }}>
+        {/* <Stack.Screen name={NavConfig.Stacks.Auth} component={AuthNavigator} /> */}
+        {!isLoggedIn ? (
+          <Root.Screen name={NavConfig.Stacks.Auth} component={AuthNavigator} />
         ) : (
-          <Stack.Screen
-            name={NavConfig.Stacks.Main}
-            component={MainNavigator}
-          />
-        )} */}
-      </Stack.Navigator>
+          <>
+            <Root.Screen
+              name={NavConfig.Stacks.Main}
+              component={MainTabNavigator}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.AccountEdit}
+              component={AccountEdit}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.ChangePassword}
+              component={ChangePassword}
+            />
+          </>
+        )}
+      </Root.Navigator>
     </NavigationContainer>
   );
 };

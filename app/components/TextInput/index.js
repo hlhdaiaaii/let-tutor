@@ -24,6 +24,7 @@ const Index = forwardRef((props, ref) => {
     onSubmitEditing = () => {},
     inputStyle,
     onBlur = () => {},
+    // editable,
     name,
     label,
     rules,
@@ -44,6 +45,9 @@ const Index = forwardRef((props, ref) => {
     return null;
   }
 
+  // console.log('defaultValue ' + defaultValue);
+  // console.log('field.value: ' + field.value);
+
   return (
     <View style={{marginBottom: 20}}>
       {label && (
@@ -51,7 +55,15 @@ const Index = forwardRef((props, ref) => {
           {label}
         </Text>
       )}
-      <View style={[BaseStyle.textInput, {backgroundColor: cardColor}, style]}>
+      <View
+        style={[
+          BaseStyle.textInput,
+          {
+            backgroundColor:
+              attrs.editable === false ? BaseColor.lightGrayColor : cardColor,
+          },
+          style,
+        ]}>
         <TextInput
           ref={ref}
           style={[
@@ -85,6 +97,7 @@ const Index = forwardRef((props, ref) => {
             field.onBlur(e);
           }}
           value={field.value}
+          // editable
           {...attrs}
         />
         {icon}

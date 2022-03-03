@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, {useEffect} from 'react';
 import {StatusBar, TouchableOpacity, View} from 'react-native';
-import {Text} from '../..';
-import {useDarkMode} from '../../../config';
-import {useStore} from '../../../store';
+import {useDarkMode} from '../../config';
+import {useStore} from '../../store';
 import styles from './styles';
+import {Text} from '../../components';
 
-export default function Header(props) {
+export const Header = props => {
   const forceDark = useStore(state => state.force_dark);
   const {
     style,
@@ -27,7 +27,6 @@ export default function Header(props) {
     barStyle,
   } = props;
   const isDarkMode = useDarkMode();
-
   useEffect(() => {
     let option = isDarkMode ? 'light-content' : 'dark-content';
     if (forceDark) {
@@ -41,7 +40,6 @@ export default function Header(props) {
     }
     StatusBar.setBarStyle(option, true);
   }, [forceDark, isDarkMode]);
-
   return (
     <View style={[styles.contain, style]}>
       <View style={[{flex: 1}, styleLeft]}>
@@ -55,7 +53,6 @@ export default function Header(props) {
         <Text headline numberOfLines={1}>
           {title}
         </Text>
-
         {subTitle != '' && (
           <Text caption2 light>
             {subTitle}
@@ -76,7 +73,7 @@ export default function Header(props) {
       </View>
     </View>
   );
-}
+};
 
 Header.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -117,3 +114,5 @@ Header.defaultProps = {
   subTitle: '',
   barStyle: '',
 };
+
+export default Header;

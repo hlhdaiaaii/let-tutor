@@ -8,7 +8,7 @@ import {useForm, FormProvider} from 'react-hook-form';
 const successInit = {
   email: true,
 };
-const ResetPassword = props => {
+const ForgotPassword = props => {
   const {...methods} = useForm({mode: 'onChange'});
   const {navigation} = props;
   const {t} = useTranslation();
@@ -99,4 +99,4 @@ const ResetPassword = props => {
   );
 };
 
-export default ResetPassword;
+export default ForgotPassword;
