@@ -1,11 +1,16 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
+import {BaseColor} from '../../config';
 
 export default StyleSheet.create({
   contain: {
     flexDirection: 'column',
-    paddingVertical: 10,
+    padding: 10,
     width: '100%',
+    // marginBottom: 20,
+    backgroundColor: BaseColor.whiteColor,
+    borderRadius: 10,
+    marginVertical: 5,
   },
   content: {
     flexDirection: 'row',
@@ -13,14 +18,14 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   thumb: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
     borderRadius: 30,
     marginRight: 5,
   },
   heartFavorite: {
-    width: 40,
-    height: 40,
+    width: 32,
+    height: 32,
     borderRadius: 20,
     position: 'absolute',
     // bottom: 0,

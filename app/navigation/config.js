@@ -9,6 +9,7 @@ export const NavConfig = {
     Account: 'Account',
     AccountEdit: 'AccountEdit',
     ChangePassword: 'ChangePassword',
+    TutorDetail: 'TutorDetail',
   },
   Stacks: {
     Auth: 'AuthStack',

@@ -23,9 +23,11 @@ import {
 import styles from './styles';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
+import DropShadow from 'react-native-drop-shadow';
+import {NavConfig} from '../../navigation/config';
 
 const topics = [
-  {id: '1', keyword: 'All'},
+  {id: '1', keyword: 'Recommended'},
   {id: '2', keyword: 'English for Kids'},
   {id: '3', keyword: 'Bussiness English'},
   {id: '4', keyword: 'Conversational Englis'},
@@ -172,14 +174,15 @@ const Home = props => {
         )}
         style={{paddingVertical: 10}}
       />
-      <View style={{padding: 20}}>
+      <View>
         <Animated.FlatList
           showsVerticalScrollIndicator={false}
           contentInset={{top: 50}}
           data={tutors}
           contentContainerStyle={{
-            marginTop: Platform.OS == 'android' ? 80 : 0,
+            marginTop: Platform.OS == 'android' ? 100 : 0,
             paddingHorizontal: 20,
+            paddingBottom: 150,
           }}
           keyExtractor={(item, index) => item.id}
           renderItem={({item, index}) => (
@@ -187,6 +190,7 @@ const Home = props => {
               image={item.avatar}
               name={item.name}
               description={item.description}
+              onPress={() => navigation.navigate(NavConfig.Screens.TutorDetail)}
             />
           )}
           scrollEventThrottle={1}
@@ -211,16 +215,18 @@ const Home = props => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <View
+              <DropShadow style={styles.searchInput}>
+                {/* <View
                 style={{
                   flex: 1,
-                  paddingRight: 12,
-                  // justifyContent: 'center',
-                  // alignItems: 'center',
-                }}>
+                  paddingRight: 12,                  
+                }}> */}
                 <FormProvider {...methods}>
                   <TextInput
-                    style={BaseStyle.textInput}
+                    style={[
+                      BaseStyle.textInput,
+                      {backgroundColor: BaseColor.whiteColor},
+                    ]}
                     autoCorrect={false}
                     placeholder={t('search_tutor')}
                     placeholderTextColor={BaseColor.grayColor}
@@ -231,9 +237,10 @@ const Home = props => {
                     <Icon name="times" size={18} color={BaseColor.grayColor} />
                   </TouchableOpacity>
                 </FormProvider>
-              </View>
+                {/* </View> */}
+              </DropShadow>
             </View>
-            <View style={{marginLeft: 15}}>
+            <View style={{marginHorizontal: 12}}>
               {/* <View style={styles.rowTitle}>
                 <Text title3 bold>
                   {t('topics')}
@@ -250,7 +257,7 @@ const Home = props => {
                     primary={item.id === chosenTopicId}
                     outline={!(item.id === chosenTopicId)}
                     style={{
-                      // marginTop: 8,
+                      // backgroundColor: BaseColor.whiteColor,
                       marginRight: 8,
                       height: 28,
                     }}

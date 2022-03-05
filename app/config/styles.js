@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {BaseColor} from '.';
 
 /**
  * Common basic style defines
@@ -31,6 +32,7 @@ export const BaseStyle = StyleSheet.create({
   },
   safeAreaView: {
     flex: 1,
+    backgroundColor: BaseColor.whiteColor,
   },
   container: {
     padding: 20,

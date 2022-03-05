@@ -1,6 +1,6 @@
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text} from '../../components';
-import {useTheme} from '../../config';
+import {BaseColor, useTheme} from '../../config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './styles';
@@ -41,7 +41,7 @@ const Tag = props => {
           styles.outline,
           {
             borderColor: colors.primary,
-            backgroundColor: colors.card,
+            backgroundColor: BaseColor.whiteColor,
           },
         ],
         outlineIcon && styles.outline,

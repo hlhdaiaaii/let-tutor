@@ -26,6 +26,13 @@
   "courses": "Courses",
   "search_tutor": "Search tutors...",
   "topics": "Topics",
-  "schedule": "Schedule"
-
+  "schedule": "Schedule",
+  "tutor": "Tutor",
+  "write_a_review": "Write a review",
+  "description": "Description",
+  "reviews": "Reviews",
+  "specialities": "Specialities",
+  "book_now": "Book now",
+  "choose_date": "Choose date",
+  "choose_time": "Choose time"
 }

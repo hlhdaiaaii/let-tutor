@@ -22,6 +22,7 @@ import {
   Courses,
   ForgotPassword,
 } from '../screens';
+import TutorDetail from '../screens/TutorDetail';
 
 const Root = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -140,6 +141,10 @@ export const Navigator = () => {
             <Root.Screen
               name={NavConfig.Screens.ChangePassword}
               component={ChangePassword}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.TutorDetail}
+              component={TutorDetail}
             />
           </>
         )}

@@ -2,6 +2,18 @@ import {StyleSheet} from 'react-native';
 import {BaseColor, BaseStyle} from '../../config';
 
 export default StyleSheet.create({
+  searchInput: {
+    flex: 1,
+    marginHorizontal: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
+  },
   search: {
     position: 'absolute',
     top: 0,
