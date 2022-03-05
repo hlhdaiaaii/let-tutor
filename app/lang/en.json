@@ -34,5 +34,8 @@
   "specialities": "Specialities",
   "book_now": "Book now",
   "choose_date": "Choose date",
-  "choose_time": "Choose time"
+  "choose_time": "Choose time",
+  "search_courses": "Search courses",
+  "lessons": "Lessons",
+  "course": "Course"
 }

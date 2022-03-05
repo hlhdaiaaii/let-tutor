@@ -9,3 +9,4 @@ export {default as Image} from './Image';
 export {default as Tag} from './Tag';
 export {default as Tutor} from './Tutor';
 export {default as BookingModal} from './BookingModal';
+export {default as Course} from './Course';
