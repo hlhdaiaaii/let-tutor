@@ -10,3 +10,4 @@ export {default as Tag} from './Tag';
 export {default as Tutor} from './Tutor';
 export {default as BookingModal} from './BookingModal';
 export {default as Course} from './Course';
+export {default as ScheduleSlot} from './ScheduleSlot';

@@ -37,5 +37,6 @@
   "choose_time": "Choose time",
   "search_courses": "Search courses",
   "lessons": "Lessons",
-  "course": "Course"
+  "course": "Course",
+  "total_learned_time": "Total learned time"
 }
