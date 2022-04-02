@@ -4,7 +4,10 @@ import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 const Image = props => {
-  const {style, resizeMode, ...rest} = props;
+  const {style, resizeMode, source, ...rest} = props;
+
+  // console.log(source);
+
   const getMode = () => {
     let resize = FastImage.resizeMode.cover;
     switch (resizeMode) {
@@ -25,6 +28,7 @@ const Image = props => {
   return (
     <FastImage
       style={StyleSheet.flatten([style && style])}
+      source={source}
       {...rest}
       resizeMode={getMode()}
     />

@@ -7,4 +7,8 @@ export const createApplicationSlice = set => ({
   theme: null,
   font: null,
   force_dark: null,
+  topics: [],
+  setTopics: topics => {
+    set(state => ({...state, topics}));
+  },
 });

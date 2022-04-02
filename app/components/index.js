@@ -11,3 +11,4 @@ export {default as Tutor} from './Tutor';
 export {default as BookingModal} from './BookingModal';
 export {default as Course} from './Course';
 export {default as ScheduleSlot} from './ScheduleSlot';
+export {default as Loading} from './Loading';

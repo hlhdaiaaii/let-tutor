@@ -1,25 +1,20 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {
-  Button,
-  Header,
-  Icon,
-  SafeAreaView,
-  Text,
-  TextInput,
-} from '../../components';
-import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {
-  TouchableOpacity,
-  View,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import styles from './styles';
-import {useNavigation} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
-import {useForm, FormProvider} from 'react-hook-form';
-import {useStore} from '../../store';
+import {Button, Header, SafeAreaView, Text, TextInput} from '../../components';
+import {BaseColor, BaseStyle, useTheme} from '../../config';
+import {authRequest} from '../../config/request';
 import {NavConfig} from '../../navigation/config';
+import {login} from '../../services/auth';
+import {useStore} from '../../store';
+import styles from './styles';
 
 const SignIn = props => {
   const {...methods} = useForm({mode: 'onChange'});
@@ -30,10 +25,21 @@ const SignIn = props => {
   const email = useRef('');
   const password = useRef('');
   const setIsLoggedIn = useStore(state => state.setIsLoggedIn);
+  const setTokens = useStore(state => state.setTokens);
 
-  const onSubmit = data => {
-    console.log(data);
+  const onSubmit = async ({email, password}) => {
+    console.log(email, password);
+
+    const tokens = await login(email, password);
+
+    console.log(tokens);
+
+    // config authRequest instance with bearer token
+    authRequest.defaults.headers.common['Authorization'] =
+      'Bearer ' + tokens.access.token;
+
     setIsLoggedIn(true);
+    setTokens(tokens);
   };
 
   const offsetKeyboard = Platform.select({

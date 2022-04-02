@@ -1,29 +1,32 @@
-import React, {useEffect} from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StatusBar} from 'react-native';
-import {useStore} from '../store';
-import {NavConfig} from './config';
-import {BaseColor, BaseStyle, useDarkMode, useTheme} from '../config';
-import {Icon} from '../components';
+import moment from 'moment';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {StatusBar} from 'react-native';
+import {Icon} from '../components';
+import {BaseColor, BaseStyle, useDarkMode, useTheme} from '../config';
+import {authRequest} from '../config/request';
 import {
-  Schedule,
-  Login,
-  SignUp,
-  Home,
-  ChangePassword,
-  AccountEdit,
   Account,
+  AccountEdit,
+  ChangePassword,
   Courses,
   ForgotPassword,
+  Home,
+  Login,
+  Schedule,
+  SignUp,
 } from '../screens';
-import TutorDetail from '../screens/TutorDetail';
 import CourseDetail from '../screens/CourseDetail';
+import TutorDetail from '../screens/TutorDetail';
+import {checkIsValidToken, refreshToken} from '../services/auth';
+import {useStore} from '../store';
+import {NavConfig} from './config';
 
 const Root = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -105,8 +108,55 @@ const MainTabNavigator = () => {
 };
 
 export const Navigator = () => {
-  const isLoggedIn = useStore(state => state.isLoggedIn);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const tokens = useStore(state => state.tokens);
+  const setTokens = useStore(state => state.setTokens);
+
+  const state = useStore(state => state);
   const isDarkMode = useDarkMode();
+
+  console.log(state);
+  console.log('tokens: ' + tokens);
+
+  useEffect(() => {
+    const checkToken = async () => {
+      // const myTokens = tokens;
+
+      if (tokens) {
+        console.log('verify tokens');
+        // verify token
+        // if expired
+        const isValidToken = await checkIsValidToken(tokens.access.token);
+        // const isValidToken = await checkIsValidToken('mockAccessToken');
+        console.log(isValidToken);
+
+        if (!isValidToken) {
+          console.log('!isValidToken');
+          console.log(tokens);
+          if (moment(Date.now()).isBefore(moment(tokens.refresh.expires))) {
+            console.log('VALID REFRESH TOKEN, refresh token');
+            console.log(tokens);
+            const newTokens = await refreshToken(tokens.refresh.token);
+
+            setIsLoggedIn(true);
+            setTokens(newTokens);
+
+            authRequest.defaults.headers.common['Authorization'] =
+              'Bearer ' + newTokens.access.token;
+          }
+        } else {
+          console.log('VALID TOKEN');
+          setIsLoggedIn(true);
+
+          authRequest.defaults.headers.common['Authorization'] =
+            'Bearer ' + tokens.access.token;
+        }
+      }
+    };
+
+    checkToken();
+  }, [tokens]);
 
   useEffect(() => {
     // Config status bar

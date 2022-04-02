@@ -31,12 +31,13 @@
   "write_a_review": "Write a review",
   "description": "Description",
   "reviews": "Reviews",
-  "specialities": "Specialities",
+  "specialties": "Specialities",
   "book_now": "Book now",
   "choose_date": "Choose date",
   "choose_time": "Choose time",
   "search_courses": "Search courses",
   "lessons": "Lessons",
   "course": "Course",
-  "total_learned_time": "Total learned time"
+  "total_learned_time": "Total learned time",
+  "experience": "Experience"
 }

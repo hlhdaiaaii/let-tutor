@@ -1,141 +1,141 @@
-import React, {useState, useRef} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useRef, useState} from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {
+  Animated,
+  FlatList,
+  Platform,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import DropShadow from 'react-native-drop-shadow';
+import Logo from '../../assets/images/logo.svg';
 import {
   Header,
   Icon,
   SafeAreaView,
   Tag,
-  Text,
   TextInput,
   Tutor,
 } from '../../components';
-import Logo from '../../assets/images/logo.svg';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {useTranslation} from 'react-i18next';
-import {
-  ActivityIndicator,
-  Keyboard,
-  TouchableOpacity,
-  View,
-  FlatList,
-  Animated,
-  Platform,
-} from 'react-native';
-import styles from './styles';
-import {FormProvider, useForm} from 'react-hook-form';
-import {useNavigation} from '@react-navigation/native';
-import DropShadow from 'react-native-drop-shadow';
 import {NavConfig} from '../../navigation/config';
+import {getTopicList, getTutorList, searchTutor} from '../../services/tutor';
+import {useStore} from '../../store';
+import styles from './styles';
 
-const topics = [
-  {id: '1', keyword: 'Recommended'},
-  {id: '2', keyword: 'English for Kids'},
-  {id: '3', keyword: 'Bussiness English'},
-  {id: '4', keyword: 'Conversational Englis'},
-  {id: '5', keyword: 'STARTERS'},
-  {id: '6', keyword: 'MOVERS'},
-  {id: '7', keyword: 'FLYERS'},
-  {id: '8', keyword: 'KET'},
-  {id: '9', keyword: 'PET'},
-  {id: '10', keyword: 'IELTS'},
-  {id: '11', keyword: 'TOEFL'},
-  {id: '12', keyword: 'TOEIC'},
-];
+// const topics = [
+//   {id: '1', keyword: 'Recommended'},
+//   {id: '2', keyword: 'English for Kids'},
+//   {id: '3', keyword: 'Bussiness English'},
+//   {id: '4', keyword: 'Conversational Englis'},
+//   {id: '5', keyword: 'STARTERS'},
+//   {id: '6', keyword: 'MOVERS'},
+//   {id: '7', keyword: 'FLYERS'},
+//   {id: '8', keyword: 'KET'},
+//   {id: '9', keyword: 'PET'},
+//   {id: '10', keyword: 'IELTS'},
+//   {id: '11', keyword: 'TOEFL'},
+//   {id: '12', keyword: 'TOEIC'},
+// ];
 
-const tutors = [
-  {
-    id: '1',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '2',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '3',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '4',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '5',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '6',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '7',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '8',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '9',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '10',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '11',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-  {
-    id: '12',
-    name: 'Alicia Mave',
-    avatar: require('../../assets/images/profile-5.jpg'),
-    description:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-  },
-];
+// const tutors = [
+//   {
+//     id: '1',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '2',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '3',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '4',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '5',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '6',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '7',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '8',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '9',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '10',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '11',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+//   {
+//     id: '12',
+//     name: 'Alicia Mave',
+//     avatar: require('../../assets/images/profile-5.jpg'),
+//     description:
+//       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
+//   },
+// ];
 
 const Home = props => {
+  console.log('DEBUG');
   const {...methods} = useForm({
     mode: 'onChange',
   });
+
   const navigation = useNavigation();
   const {t} = useTranslation();
   const {colors} = useTheme();
-  const [chosenTopicId, setChosenTopicId] = useState(topics[0].id);
 
   const scrollAnim = useRef(new Animated.Value(0)).current;
   const offsetAnim = useRef(new Animated.Value(0)).current;
@@ -159,6 +159,74 @@ const Home = props => {
     outputRange: [0, -40],
     extrapolate: 'clamp',
   });
+
+  const [tutors, setTutors] = useState([]);
+  const [page, setPage] = useState(1);
+  const perPage = 9;
+
+  const topics = useStore(state => state.topics);
+  const [chosenTopicKey, setChosenTopicKey] = useState('');
+  const setTopics = useStore(state => state.setTopics);
+
+  const [searchKeyword, setSearchKeyword] = useState('');
+
+  useEffect(() => {
+    const fetchAndSaveTopic = async () => {
+      const topicList = await getTopicList();
+
+      console.log(topicList);
+
+      setTopics(topicList);
+    };
+
+    fetchAndSaveTopic();
+  }, []);
+
+  useEffect(() => {
+    const fetchTutors = async () => {
+      const data = await getTutorList(page, perPage);
+
+      setTutors(data);
+    };
+
+    fetchTutors();
+  }, []);
+
+  useEffect(() => {
+    console.log('search keyword: ' + searchKeyword);
+
+    const search = async () => {
+      const data = await searchTutor(
+        {specialties: [chosenTopicKey]},
+        searchKeyword,
+        page,
+        perPage,
+      );
+      setTutors(data);
+      console.log(data);
+    };
+
+    const timeoutRef = setTimeout(() => {
+      search();
+    }, 300);
+
+    return () => clearTimeout(timeoutRef);
+  }, [searchKeyword]);
+
+  useEffect(() => {
+    const search = async () => {
+      const data = await searchTutor(
+        {specialties: [chosenTopicKey]},
+        searchKeyword,
+        page,
+        perPage,
+      );
+      setTutors(data);
+      console.log(data);
+    };
+
+    search();
+  }, [chosenTopicKey]);
 
   return (
     <SafeAreaView
@@ -185,14 +253,25 @@ const Home = props => {
             paddingBottom: 150,
           }}
           keyExtractor={(item, index) => item.id}
-          renderItem={({item, index}) => (
-            <Tutor
-              image={item.avatar}
-              name={item.name}
-              description={item.description}
-              onPress={() => navigation.navigate(NavConfig.Screens.TutorDetail)}
-            />
-          )}
+          renderItem={({item, index}) => {
+            return (
+              <Tutor
+                image={item.avatar}
+                specialties={item.specialties.split(',').map(e => {
+                  // console.log(e);
+                  return topics.find(o => o.key === e);
+                })}
+                rating={item.rating}
+                name={item.name}
+                description={item.description}
+                onPress={() =>
+                  navigation.navigate(NavConfig.Screens.TutorDetail, {
+                    id: item.id,
+                  })
+                }
+              />
+            );
+          }}
           scrollEventThrottle={1}
           onScroll={Animated.event(
             [
@@ -216,11 +295,6 @@ const Home = props => {
                 alignItems: 'center',
               }}>
               <DropShadow style={styles.searchInput}>
-                {/* <View
-                style={{
-                  flex: 1,
-                  paddingRight: 12,                  
-                }}> */}
                 <FormProvider {...methods}>
                   <TextInput
                     style={[
@@ -232,37 +306,39 @@ const Home = props => {
                     placeholderTextColor={BaseColor.grayColor}
                     selectionColor={colors.primary}
                     name="search"
+                    onChangeText={text => {
+                      setSearchKeyword(text);
+                    }}
                   />
-                  <TouchableOpacity style={styles.btnClearSearch}>
+                  <TouchableOpacity
+                    style={styles.btnClearSearch}
+                    onPress={() => {
+                      methods.reset();
+                      setSearchKeyword('');
+                    }}>
                     <Icon name="times" size={18} color={BaseColor.grayColor} />
                   </TouchableOpacity>
                 </FormProvider>
-                {/* </View> */}
               </DropShadow>
             </View>
             <View style={{marginHorizontal: 12}}>
-              {/* <View style={styles.rowTitle}>
-                <Text title3 bold>
-                  {t('topics')}
-                </Text>
-              </View> */}
               <FlatList
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={topics}
-                keyExtractor={(item, index) => item.id}
+                keyExtractor={(item, index) => item.key}
                 renderItem={({item, index}) => (
                   <Tag
-                    key={item.id}
-                    primary={item.id === chosenTopicId}
-                    outline={!(item.id === chosenTopicId)}
+                    // key={item.key}
+                    primary={item.key === chosenTopicKey}
+                    outline={!(item.key === chosenTopicKey)}
                     style={{
                       // backgroundColor: BaseColor.whiteColor,
                       marginRight: 8,
                       height: 28,
                     }}
-                    onPress={() => setChosenTopicId(item.id)}>
-                    {item.keyword}
+                    onPress={() => setChosenTopicKey(item.key)}>
+                    {item.name}
                   </Tag>
                 )}
               />

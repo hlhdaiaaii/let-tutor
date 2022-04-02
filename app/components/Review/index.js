@@ -8,7 +8,16 @@ import {AirbnbRating} from 'react-native-ratings';
 
 export default function Review(props) {
   const {colors} = useTheme();
-  const {style, image, name, date, review, rate, onAction = () => {}} = props;
+  const {
+    style,
+    image,
+    name,
+    date,
+    content,
+    rating,
+    onAction = () => {},
+  } = props;
+
   return (
     <View style={[styles.contain, {backgroundColor: colors.background}, style]}>
       <View
@@ -32,7 +41,7 @@ export default function Review(props) {
         </View>
         <AirbnbRating
           count={5}
-          defaultRating={5}
+          defaultRating={rating}
           size={20}
           showRating={false}
           isDisabled
@@ -41,11 +50,12 @@ export default function Review(props) {
       <View>
         <Text
           body2
-          thin grayColor
+          thin
+          grayColor
           style={{
             marginTop: 10,
           }}>
-          {review}
+          {content}
         </Text>
       </View>
     </View>
@@ -54,7 +64,6 @@ export default function Review(props) {
 
 Review.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  image: PropTypes.node.isRequired,
   name: PropTypes.string,
   date: PropTypes.string,
   review: PropTypes.string,
