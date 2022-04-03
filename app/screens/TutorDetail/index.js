@@ -15,9 +15,11 @@ import {
   Text,
 } from '../../components';
 import Review from '../../components/Review';
+import {TableBooking} from '../../components/TableBooking';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
 import {getTutorInfo, getTutorSchedule} from '../../services/tutor';
 import {useStore} from '../../store';
+import {getTitlesAndHeads} from '../../utils/booking';
 import styles from './styles';
 
 // const tutor = {
@@ -81,6 +83,9 @@ const TutorDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [bookingModalVisible, setBookingModalVisible] = useState(false);
   const topics = useStore(state => state.topics);
+  const [schedulePage, setSchedulePage] = useState(1);
+  const [tutorScheduleData, setTutorScheduleData] = useState(null);
+  const [tutorScheduleShow, setTutorScheduleShow] = useState(null);
 
   useEffect(() => {
     const fetchTutorDetail = async () => {
@@ -102,11 +107,25 @@ const TutorDetail = () => {
       console.log(tutor);
       const fetchTutorSchedules = async () => {
         const data = await getTutorSchedule(tutor.id);
+        setTutorScheduleData(data);
       };
 
       fetchTutorSchedules();
     }
   }, [tutor]);
+
+  useEffect(() => {
+    if (tutorScheduleData) {
+      setTutorScheduleShow(
+        getTitlesAndHeads(
+          tutorScheduleData.schedules,
+          tutorScheduleData.firstTime,
+          tutorScheduleData.lastTime,
+          schedulePage,
+        ),
+      );
+    }
+  }, [schedulePage, tutorScheduleData]);
 
   const onFavoriteClick = () => {};
 
@@ -244,7 +263,14 @@ const TutorDetail = () => {
                     )}
                   />
                 </View>
-
+                <View>
+                  {tutorScheduleShow ? (
+                    <TableBooking
+                      data={tutorScheduleShow}
+                      page={schedulePage}
+                    />
+                  ) : null}
+                </View>
                 <View
                   style={{
                     flexDirection: 'row',

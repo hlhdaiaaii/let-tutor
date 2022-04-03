@@ -1,6 +1,9 @@
 export const createAuthSlice = set => ({
   isLoggedIn: false,
-  userId: 10,
+  userInfo: null,
+  setUserInfo: info => {
+    set(state => ({...state, userInfo: info}))
+  },
   // tokens: {
   //   access: {
   //     expires: '2022-03-25T06:55:42.403Z',

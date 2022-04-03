@@ -1,5 +1,5 @@
 import {authRequest} from '../config/request';
-import { processTutorSchedule } from '../utils/booking';
+import {processTutorSchedule} from '../utils/booking';
 import withLogCatch from '../utils/withLogCatch';
 
 export const addFavoriteTutor = async tutorId => {
@@ -73,9 +73,7 @@ export const getTutorSchedule = async tutorId => {
     authRequest.post(`${endPoint}`, {tutorId}),
   );
 
-  processTutorSchedule(res.data.data);
-
-  return res;
+  return processTutorSchedule(res.data.data);
 };
 
 export const searchTutor = async (filters, search, page, perPage) => {

@@ -1,5 +1,5 @@
-import moment from 'moment';
 import _ from 'lodash';
+import moment from 'moment';
 
 export const processTutorSchedule = data => {
   const now = Date.now();
@@ -39,24 +39,23 @@ export const processTutorSchedule = data => {
   const result = {
     firstTime: moment(firstTime.startPeriodTimestamp),
     lastTime: moment(lastTime.startPeriodTimestamp),
-    ...getTitlesAndHeads(
-      schedules,
-      moment(firstTime.startPeriodTimestamp),
-      moment(lastTime.startPeriodTimestamp),
-    ),
+    schedules,
   };
-
-  //   generateBookingCellData(result);
 
   return result;
 };
 
-export const generateBookingCellData = data => {
+export const generateBookingCellData = (data, page) => {
   const today = moment();
+  //   let n = 7;
+  //   if (page > 1) n = 8;
 
   const days = [];
   for (let i = 0; i < 7; i++) {
-    const tmp = today.clone().add(i, 'days');
+    const tmp = today
+      .clone()
+      .add(7 * (page - 1), 'days')
+      .add(i, 'days');
     days.push(tmp);
   }
 
@@ -64,33 +63,31 @@ export const generateBookingCellData = data => {
   data.titles.forEach(t => {
     const row = [];
     const time = moment(t.substring(0, 5), 'HH:mm');
+
     days.forEach(d => {
       row.push({
         key: t,
-        startPeriodTimestamp: d
-          .clone()
-          .set({
-            hours: time.hours(),
-            minutes: time.minutes(),
-          })
-          .unix(),
+        startPeriodTimestamp: moment(
+          `${d.format('YYYY-MM-DD')} ${time.format('HH:mm')}`,
+          'YYYY-MM-DD HH:mm',
+        ).valueOf(),
       });
     });
     cellData.push(row);
   });
 
-  console.log('cellData');
-  console.log(cellData);
+  return cellData;
 };
 
 export const getTitlesAndHeads = (
   schedules = [],
   firstTime = moment(),
   lastTime = moment(),
-  page = 2,
+  page = 1,
 ) => {
   const today = moment();
-  const period = 6;
+  let period = 6;
+  if (page > 1) period = 7;
 
   //   const todayStartTimeSlot = schedules.reduce((acc, schedule) => {
   //     if (!acc) return schedule;
@@ -160,8 +157,11 @@ export const getTitlesAndHeads = (
   // heads
   const heads = [];
   for (let i = 0; i < 7; i++) {
-    const tmp = today.clone().add(i, 'days');
-    heads.push(`${tmp.format('DD/MM')}/n${tmp.format('ddd')}`);
+    const tmp = today
+      .clone()
+      .add(7 * (page - 1), 'days')
+      .add(i, 'days');
+    heads.push(`${tmp.format('DD/MM')}\n${tmp.format('ddd')}`);
   }
   console.log('heads');
   console.log(heads);

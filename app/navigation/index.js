@@ -24,7 +24,7 @@ import {
 } from '../screens';
 import CourseDetail from '../screens/CourseDetail';
 import TutorDetail from '../screens/TutorDetail';
-import {checkIsValidToken, refreshToken} from '../services/auth';
+import {getUserInfo, refreshToken} from '../services/auth';
 import {useStore} from '../store';
 import {NavConfig} from './config';
 
@@ -112,6 +112,7 @@ export const Navigator = () => {
 
   const tokens = useStore(state => state.tokens);
   const setTokens = useStore(state => state.setTokens);
+  const setUserInfo = useStore(state => state.setUserInfo);
 
   const state = useStore(state => state);
   const isDarkMode = useDarkMode();
@@ -127,11 +128,12 @@ export const Navigator = () => {
         console.log('verify tokens');
         // verify token
         // if expired
-        const isValidToken = await checkIsValidToken(tokens.access.token);
-        // const isValidToken = await checkIsValidToken('mockAccessToken');
-        console.log(isValidToken);
+        const userInfo = await getUserInfo(tokens.access.token);
+        // const isValidToken = await getUserInfo('mockAccessToken');
+        console.log('userInfo');
+        console.log(userInfo);
 
-        if (!isValidToken) {
+        if (!userInfo) {
           console.log('!isValidToken');
           console.log(tokens);
           if (moment(Date.now()).isBefore(moment(tokens.refresh.expires))) {
@@ -141,12 +143,14 @@ export const Navigator = () => {
 
             setIsLoggedIn(true);
             setTokens(newTokens);
+            setUserInfo(userInfo);
 
             authRequest.defaults.headers.common['Authorization'] =
               'Bearer ' + newTokens.access.token;
           }
         } else {
           console.log('VALID TOKEN');
+          setUserInfo(userInfo);
           setIsLoggedIn(true);
 
           authRequest.defaults.headers.common['Authorization'] =

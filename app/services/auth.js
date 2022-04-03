@@ -24,7 +24,7 @@ export const refreshToken = async refreshToken => {
   return res.data.tokens;
 };
 
-export async function checkIsValidToken(accessToken) {
+export async function getUserInfo(accessToken) {
   const endPoint = 'user/info';
 
   const [res, err] = await withLogCatch(
@@ -33,6 +33,10 @@ export async function checkIsValidToken(accessToken) {
     }),
   );
 
-  if (err) return false;
-  return true;
+  if (err) return null;
+
+  const {id, email, name, avatar, country, phone, language, birthday} =
+    res.data.user;
+
+  return {id, email, name, avatar, country, phone, language, birthday};
 }
