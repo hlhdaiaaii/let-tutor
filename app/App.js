@@ -1,10 +1,9 @@
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import React from 'react';
-import {QueryClientProvider, QueryClient} from 'react-query';
+import Toast from 'react-native-toast-message';
 import {Navigator} from './navigation';
 
-const RNQueryClient = new QueryClient();
 i18n.use(initReactI18next).init({
   compatibilityJSON: 'v3',
   resources: {
@@ -23,9 +22,10 @@ const App = () => {
   // const isDark = useStore(state => state.isDarkMode);
 
   return (
-    <QueryClientProvider client={RNQueryClient}>
+    <>
       <Navigator />
-    </QueryClientProvider>
+      <Toast />
+    </>
   );
 };
 

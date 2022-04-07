@@ -134,7 +134,7 @@ Index.defaultProps = {
   style: {},
   onChangeText: text => {},
   onFocus: () => {},
-  placeholder: 'Placeholder',
+  placeholder: '',
   value: '',
   success: true,
   secureTextEntry: false,

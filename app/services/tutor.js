@@ -1,6 +1,8 @@
 import {authRequest} from '../config/request';
 import {processTutorSchedule} from '../utils/booking';
 import withLogCatch from '../utils/withLogCatch';
+import languageConverter from 'iso-language-converter';
+import {isoCountry} from 'iso-country';
 
 export const addFavoriteTutor = async tutorId => {
   const endPoint = 'user/manageFavoriteTutor';
@@ -131,7 +133,10 @@ export const getTutorInfo = async tutorId => {
     id: res.data.userId,
     name: res.data.User.name,
     avatar: res.data.User.avatar,
-    country: res.data.country,
+    country: isoCountry(res.data.User.country).name,
+    languages: res.data.languages
+      .split(',')
+      .map(lang => languageConverter(lang)),
     video: res.data.video,
     specialties: res.data.specialties.split(','),
     rating: res.data.avgRating,
@@ -146,5 +151,40 @@ export const getTutorInfo = async tutorId => {
       name: e.firstInfo.name,
       avatar: e.firstInfo.avatar,
     })),
+    isFavorite: res.data.isFavorite,
   };
+};
+
+export const requestBecomeTutor = async payload => {
+  const endPoint = `tutor/register`;
+
+  const params = new FormData();
+  for (var key in payload) {
+    if (key == 'avatar' || key == 'video') continue;
+    if (key == 'languages') {
+      params.append(key, ['Vietnamese', 'English']);
+      continue;
+    }
+    if (key == 'specialties') {
+      params.append(key, 'english-for-kids,business-english');
+      continue;
+    }
+    params.append(key, payload[key]);
+  }
+  const videoInfo = payload.video;
+  params.append('video', {
+    name: 'introVideo.mp4',
+    uri: videoInfo.uri,
+    type: videoInfo.type,
+  });
+  const imageInfo = payload.avatar;
+  params.append('avatar', {
+    name: imageInfo.fileName,
+    uri: imageInfo.uri,
+    type: imageInfo.type,
+  });
+  params.append('price', 5000);
+  console.log(params);
+  const res = await authRequest.post(endPoint, params);
+  return res.data;
 };

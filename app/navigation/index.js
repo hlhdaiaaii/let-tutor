@@ -22,7 +22,12 @@ import {
   Schedule,
   SignUp,
 } from '../screens';
+import BecomeTutor1 from '../screens/BecomeTutor/step1';
+import BecomeTutor2 from '../screens/BecomeTutor/step2';
+import BecomeTutor3 from '../screens/BecomeTutor/step3';
+import Booking from '../screens/Booking';
 import CourseDetail from '../screens/CourseDetail';
+import {ReportTutor} from '../screens/ReportTutor';
 import TutorDetail from '../screens/TutorDetail';
 import {getUserInfo, refreshToken} from '../services/auth';
 import {useStore} from '../store';
@@ -204,6 +209,23 @@ export const Navigator = () => {
             <Root.Screen
               name={NavConfig.Screens.CourseDetail}
               component={CourseDetail}
+            />
+            <Root.Screen name={NavConfig.Screens.Booking} component={Booking} />
+            <Root.Screen
+              name={NavConfig.Screens.ReportTutor}
+              component={ReportTutor}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.BecomeTutor1}
+              component={BecomeTutor1}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.BecomeTutor2}
+              component={BecomeTutor2}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.BecomeTutor3}
+              component={BecomeTutor3}
             />
           </>
         )}

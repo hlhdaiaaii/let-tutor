@@ -1,5 +1,7 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-// import {AuthActions, ApplicationActions} from '@actions';
+import {useTranslation} from 'react-i18next';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {
   Button,
   Icon,
@@ -8,16 +10,10 @@ import {
   Text,
 } from '../../components';
 import {BaseStyle, useTheme} from '../../config';
-// Load sample data
 import {UserData} from '../../mock-data';
-import {useTranslation} from 'react-i18next';
-import {ScrollView, TouchableOpacity, View, Switch} from 'react-native';
-// import {useDispatch, useSelector} from 'react-redux';
-import styles from './styles';
-import {useStore} from '../../store';
-import {useNavigation} from '@react-navigation/native';
 import {NavConfig} from '../../navigation/config';
-// const {authentication} = AuthActions;
+import {useStore} from '../../store';
+import styles from './styles';
 
 const Account = props => {
   const {colors} = useTheme();
@@ -26,6 +22,7 @@ const Account = props => {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(UserData[0]);
   const setIsLoggedIn = useStore(state => state.setIsLoggedIn);
+  const userInfo = useStore(state => state.userInfo);
 
   const onLogOut = () => {
     setIsLoggedIn(false);
@@ -83,6 +80,25 @@ const Account = props => {
                   navigation.navigate(NavConfig.Screens.ChangePassword);
                 }}>
                 <Text body1>{t('change_password')}</Text>
+                <Icon
+                  name="angle-right"
+                  size={18}
+                  color={colors.primary}
+                  style={{marginLeft: 5}}
+                  enableRTL={true}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styleItem}
+                onPress={() => {
+                  navigation.navigate(NavConfig.Screens.BecomeTutor1);
+                  // if (userInfo.tutorInfo) {
+                  //   navigation.navigate(NavConfig.Screens.BecomeTutor3);
+                  // } else {
+                  //   navigation.navigate(NavConfig.Screens.BecomeTutor1);
+                  // }
+                }}>
+                <Text body1>{t('become_tutor')}</Text>
                 <Icon
                   name="angle-right"
                   size={18}

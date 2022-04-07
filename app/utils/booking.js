@@ -7,8 +7,8 @@ export const processTutorSchedule = data => {
   const schedules = data.flatMap(schedule => [
     ...schedule.scheduleDetails.filter(e => e.startPeriodTimestamp > now),
   ]);
-  console.log('schedules');
-  console.log(schedules);
+  // console.log('schedules');
+  // console.log(schedules);
 
   //   schedules.sort((a, b) => {
   //     const time1 = moment(a.startPeriodTimestamp);
@@ -18,8 +18,8 @@ export const processTutorSchedule = data => {
   //   });
 
   schedules.sort((a, b) => a.startPeriodTimestamp - b.startPeriodTimestamp);
-  console.log('sorted schedules');
-  console.log(schedules);
+  // console.log('sorted schedules');
+  // console.log(schedules);
 
   const firstTime = schedules.reduce((acc, schedule) => {
     if (!acc) return schedule;
@@ -151,8 +151,8 @@ export const getTitlesAndHeads = (
       .format('HH:mm')}`,
   );
 
-  console.log('titles');
-  console.log(titles);
+  // console.log('titles');
+  // console.log(titles);
 
   // heads
   const heads = [];
@@ -163,8 +163,8 @@ export const getTitlesAndHeads = (
       .add(i, 'days');
     heads.push(`${tmp.format('DD/MM')}\n${tmp.format('ddd')}`);
   }
-  console.log('heads');
-  console.log(heads);
+  // console.log('heads');
+  // console.log(heads);
 
   // timeslots
   const timeSlots = _.groupBy(timeSlotsInPageRange, e => {
@@ -175,8 +175,8 @@ export const getTitlesAndHeads = (
       .format('HH:mm')}`;
   });
 
-  console.log('timeSlots');
-  console.log(timeSlots);
+  // console.log('timeSlots');
+  // console.log(timeSlots);
   return {
     titles,
     heads,

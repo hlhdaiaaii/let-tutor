@@ -27,7 +27,7 @@ export default function Button(props) {
         outline && [
           styles.outline,
           {
-            backgroundColor: colors.card,
+            backgroundColor: 'white',
             borderColor: colors.primary,
           },
         ],

@@ -12,3 +12,8 @@ export {default as BookingModal} from './BookingModal';
 export {default as Course} from './Course';
 export {default as ScheduleSlot} from './ScheduleSlot';
 export {default as Loading} from './Loading';
+export {default as StepProcess} from './StepProcess';
+export {default as CountryPicker} from './CountryPicker';
+export {default as DatePicker} from './DatePicker';
+export {default as TopicPicker} from './TopicPicker';
+export {default as LanguagePicker} from './LanguagePicker';

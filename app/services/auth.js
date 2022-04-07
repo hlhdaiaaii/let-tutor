@@ -35,8 +35,27 @@ export async function getUserInfo(accessToken) {
 
   if (err) return null;
 
-  const {id, email, name, avatar, country, phone, language, birthday} =
-    res.data.user;
+  const {
+    id,
+    email,
+    name,
+    avatar,
+    country,
+    phone,
+    language,
+    birthday,
+    tutorInfo,
+  } = res.data.user;
 
-  return {id, email, name, avatar, country, phone, language, birthday};
+  return {
+    id,
+    email,
+    name,
+    avatar,
+    country,
+    phone,
+    language,
+    birthday,
+    tutorInfo,
+  };
 }

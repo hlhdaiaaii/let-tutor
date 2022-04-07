@@ -39,5 +39,9 @@
   "lessons": "Lessons",
   "course": "Course",
   "total_learned_time": "Total learned time",
-  "experience": "Experience"
+  "experience": "Experience",
+  "tutor_schedule": "Tutor Schedule",
+  "book_lesson": "Book Lesson",
+  "languages": "Languages",
+  "become_tutor": "Become Tutor"
 }

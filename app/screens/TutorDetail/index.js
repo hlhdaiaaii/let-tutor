@@ -1,15 +1,15 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, RefreshControl, TouchableOpacity, View} from 'react-native';
 import {AirbnbRating} from 'react-native-ratings';
 import {
   BookingModal,
-  Button,
   Header,
   Icon,
   Image,
+  Loading,
   SafeAreaView,
   Tag,
   Text,
@@ -17,10 +17,15 @@ import {
 import Review from '../../components/Review';
 import {TableBooking} from '../../components/TableBooking';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {getTutorInfo, getTutorSchedule} from '../../services/tutor';
+import {
+  addFavoriteTutor,
+  getTutorInfo,
+  getTutorSchedule,
+} from '../../services/tutor';
 import {useStore} from '../../store';
 import {getTitlesAndHeads} from '../../utils/booking';
 import styles from './styles';
+import Video from 'react-native-video';
 
 // const tutor = {
 //   id: '1',
@@ -86,15 +91,17 @@ const TutorDetail = () => {
   const [schedulePage, setSchedulePage] = useState(1);
   const [tutorScheduleData, setTutorScheduleData] = useState(null);
   const [tutorScheduleShow, setTutorScheduleShow] = useState(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const fetchTutorDetail = async () => {
       const data = await getTutorInfo(tutorId);
 
-      console.log('data');
+      console.log('tutorInfo');
       console.log(data);
 
       setTutor(data);
+      setIsFavorite(data.isFavorite);
     };
 
     console.log('tutorId: ', tutorId);
@@ -127,9 +134,10 @@ const TutorDetail = () => {
     }
   }, [schedulePage, tutorScheduleData]);
 
-  const onFavoriteClick = () => {};
-
-  const onBookingClick = () => setBookingModalVisible(true);
+  const onFavoriteClick = () => {
+    setIsFavorite(true);
+    addFavoriteTutor(tutor.id);
+  };
 
   return (
     <SafeAreaView
@@ -168,6 +176,23 @@ const TutorDetail = () => {
             keyExtractor={(item, index) => item.id}
             ListHeaderComponent={() => (
               <View style={{marginBottom: 10}}>
+                {/* <View>
+                  <Video
+                    source={{
+                      uri: tutor.video,
+                    }}
+                    style={{
+                      width: '96%',
+                      height: 200,
+                      alignSelf: 'center',
+                      margin: 5,
+                      flex: 1,
+                    }}
+                    controls
+                    repeat={false}
+                    resizeMode={'contain'}
+                  />
+                </View> */}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image
                     source={{
@@ -223,13 +248,41 @@ const TutorDetail = () => {
                     />
                   </TouchableOpacity>
                 </View>
-                <Button
+
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('ReportTutor', {tutor});
+                    }}
+                    style={{
+                      marginTop: 10,
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Icon name="exclamation-circle" size={18} />
+                    <Text>Report</Text>
+                  </TouchableOpacity>
+                </View>
+                {/* <Button
                   full
                   round
                   style={{marginTop: 10, height: 50}}
                   onPress={onBookingClick}>
                   {t('book_now')}
-                </Button>
+                </Button> */}
+                <View style={{marginTop: 20}}>
+                  <Text title2 primaryColor>
+                    {t('languages')}
+                  </Text>
+                  <Text body2 regular style={{marginTop: 10}}>
+                    {tutor.languages.join(', ')}
+                  </Text>
+                </View>
                 <View style={{marginTop: 20}}>
                   <Text title2 primaryColor>
                     {t('experience')}
@@ -263,13 +316,22 @@ const TutorDetail = () => {
                     )}
                   />
                 </View>
-                <View>
+                <View style={{marginTop: 20}}>
+                  <Text title2 primaryColor style={{marginBottom: 10}}>
+                    {t('tutor_schedule')}
+                  </Text>
+
                   {tutorScheduleShow ? (
                     <TableBooking
                       data={tutorScheduleShow}
+                      tutor={tutor}
                       page={schedulePage}
                     />
-                  ) : null}
+                  ) : (
+                    <View>
+                      <Loading />
+                    </View>
+                  )}
                 </View>
                 <View
                   style={{
