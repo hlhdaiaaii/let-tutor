@@ -21,16 +21,12 @@ const Account = props => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(UserData[0]);
-  const setIsLoggedIn = useStore(state => state.setIsLoggedIn);
+  const setTokens = useStore(state => state.setTokens);
   const userInfo = useStore(state => state.userInfo);
 
   const onLogOut = () => {
-    setIsLoggedIn(false);
+    setTokens(null);
   };
-
-  // const onLogIn = () => {
-  //   navigation.navigate('SignIn');
-  // };
 
   const styleItem = {
     ...styles.profileItem,
@@ -52,11 +48,10 @@ const Account = props => {
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}>
             <ProfileDetail
-              image={userData.image}
-              textFirst={userData.name}
-              point={userData.point}
-              textSecond={userData.address}
-              textThird={userData.id}
+              image={{uri: userInfo.avatar}}
+              textFirst={userInfo.name}
+              textSecond={userInfo.phone}
+              textThird={userInfo.email}
               onPress={() => {}}
             />
             <View style={{width: '100%', marginTop: 50}}>
@@ -92,13 +87,41 @@ const Account = props => {
                 style={styleItem}
                 onPress={() => {
                   navigation.navigate(NavConfig.Screens.BecomeTutor1);
-                  // if (userInfo.tutorInfo) {
-                  //   navigation.navigate(NavConfig.Screens.BecomeTutor3);
-                  // } else {
-                  //   navigation.navigate(NavConfig.Screens.BecomeTutor1);
-                  // }
+                  if (userInfo.tutorInfo) {
+                    navigation.navigate(NavConfig.Screens.BecomeTutor3);
+                  } else {
+                    navigation.navigate(NavConfig.Screens.BecomeTutor1);
+                  }
                 }}>
                 <Text body1>{t('become_tutor')}</Text>
+                <Icon
+                  name="angle-right"
+                  size={18}
+                  color={colors.primary}
+                  style={{marginLeft: 5}}
+                  enableRTL={true}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styleItem}
+                onPress={() => {
+                  navigation.navigate(NavConfig.Screens.ChangeTheme);
+                }}>
+                <Text body1>{t('change_theme')}</Text>
+                <Icon
+                  name="angle-right"
+                  size={18}
+                  color={colors.primary}
+                  style={{marginLeft: 5}}
+                  enableRTL={true}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styleItem}
+                onPress={() => {
+                  navigation.navigate(NavConfig.Screens.ChangeLanguage);
+                }}>
+                <Text body1>{t('change_language')}</Text>
                 <Icon
                   name="angle-right"
                   size={18}

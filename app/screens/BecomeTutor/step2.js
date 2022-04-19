@@ -43,6 +43,7 @@ export default function BecomeTutor2() {
             text1: 'Action failed',
             text2: response.errorMessage,
             type: 'error',
+            visibilityTime: 500,
           });
         } else {
           setVideo(response.assets[0]);
@@ -56,6 +57,7 @@ export default function BecomeTutor2() {
       Toast.show({
         type: 'info',
         text2: 'Please choose a introduce video',
+        visibilityTime: 500,
       });
       return;
     }

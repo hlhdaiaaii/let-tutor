@@ -219,21 +219,11 @@ export const DefaultFont = 'ProximaNova';
  * @returns theme,colors
  */
 export const useTheme = () => {
-  const isDarkMode = useDarkMode();
-  const forceDark = useStore(state => state.force_dark);
   const themeStorage = useStore(state => state.theme);
   const listTheme = ThemeSupport.filter(item => item.theme == themeStorage);
   const theme = listTheme.length > 0 ? listTheme[0] : DefaultTheme;
 
-  if (forceDark) {
-    return {theme: theme.dark, colors: theme.dark.colors};
-  }
-  if (forceDark == false) {
-    return {theme: theme.light, colors: theme.light.colors};
-  }
-  return isDarkMode
-    ? {theme: theme.dark, colors: theme.dark.colors}
-    : {theme: theme.light, colors: theme.light.colors};
+  return {theme: theme.light, colors: theme.light.colors};
 };
 
 /**
@@ -245,7 +235,7 @@ export const useFont = () => {
   return font ?? DefaultFont;
 };
 
-export const useDarkMode = () => {
-  const isDarkMode = useStore(state => state.isDarkMode);
-  return isDarkMode;
-};
+// export const useDarkMode = () => {
+//   const isDarkMode = useStore(state => state.isDarkMode);
+//   return isDarkMode;
+// };

@@ -17,7 +17,6 @@ export default function ProfileDetail(props) {
     styleRight,
     onPress,
     textFirst,
-    point,
     textSecond,
     textThird,
     icon,
@@ -30,11 +29,6 @@ export default function ProfileDetail(props) {
       <View style={[styles.contentLeft, styleLeft]}>
         <View>
           <Image source={image} style={[styles.thumb, styleThumb]} />
-          {/* <View style={[styles.point, {backgroundColor: colors.primaryLight}]}>
-            <Text overline whiteColor semibold>
-              {point}
-            </Text>
-          </View> */}
         </View>
         <View style={{alignItems: 'flex-start'}}>
           <Text headline semibold numberOfLines={1}>
@@ -72,7 +66,6 @@ ProfileDetail.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   image: PropTypes.node.isRequired,
   textFirst: PropTypes.string,
-  point: PropTypes.string,
   textSecond: PropTypes.string,
   textThird: PropTypes.string,
   styleLeft: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),

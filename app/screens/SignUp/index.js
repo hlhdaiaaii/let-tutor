@@ -1,44 +1,49 @@
+import React from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {ScrollView, View} from 'react-native';
+import Toast from 'react-native-toast-message';
 import {Button, Header, Icon, SafeAreaView, TextInput} from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import React, {useRef, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import {signUp} from '../../services/auth';
 import styles from './styles';
-import {useTranslation} from 'react-i18next';
-import {useForm, FormProvider} from 'react-hook-form';
-
-// const successInit = {
-//   name: true,
-//   email: true,
-//   address: true,
-// };
 
 const SignUp = props => {
   const {...methods} = useForm({mode: 'onChange'});
   const {navigation} = props;
   const {t} = useTranslation();
   const {colors} = useTheme();
-  const name = useRef('');
-  const email = useRef('');
-  const address = useRef('');
-  const [loading, setLoading] = useState(false);
-  // const [success, setSuccess] = useState(successInit);
 
-  // const onSignUp = () => {
-  //   if (name == '' || email == '' || address == '') {
-  //     setSuccess({
-  //       ...success,
-  //       name: name != '' ? true : false,
-  //       email: email != '' ? true : false,
-  //       address: address != '' ? true : false,
-  //     });
-  //   } else {
-  //     setLoading(true);
-  //     setTimeout(() => {
-  //       setLoading(false);
-  //       navigation.navigate('SignIn');
-  //     }, 500);
-  //   }
-  // };
+  const onSubmit = async ({email, password, confirmPassword}) => {
+    console.log(email, password, confirmPassword);
+
+    if (password !== confirmPassword) {
+      Toast.show({
+        text1: 'Sign up',
+        text2: 'Confirm password is not matched',
+        type: 'error',
+        visibilityTime: 500,
+      });
+      return;
+    }
+
+    const res = await signUp(email, password);
+
+    if (!res.user)
+      Toast.show({
+        text1: 'Sign up',
+        text2: res.message,
+        type: 'error',
+        visibilityTime: 500,
+      });
+    else
+      Toast.show({
+        text1: 'Sign up',
+        text2: 'Sign up successfully',
+        type: 'success',
+        visibilityTime: 500,
+      });
+  };
 
   return (
     <SafeAreaView
@@ -64,26 +69,11 @@ const SignUp = props => {
         <View style={[styles.contain, {marginTop: 65}]}>
           <FormProvider {...methods}>
             <TextInput
-              style={[BaseStyle.textInput]}
-              autoCorrect={false}
-              placeholder={t('input_name')}
-              placeholderTextColor={BaseColor.grayColor}
-              onChangeText={text => {
-                name.current = text;
-              }}
-              label="Name"
-              name="name"
-              rules={{required: `Name ${t('is_required')}`}}
-            />
-            <TextInput
               style={[BaseStyle.textInput, {marginTop: 10}]}
               autoCorrect={false}
               placeholder={t('input_email')}
               keyboardType="email-address"
               placeholderTextColor={BaseColor.grayColor}
-              onChangeText={text => {
-                name.current = text;
-              }}
               label="Email"
               name="email"
               rules={{
@@ -96,17 +86,25 @@ const SignUp = props => {
             />
             <TextInput
               style={[BaseStyle.textInput, {marginTop: 10}]}
+              onFocus={() => {}}
               autoCorrect={false}
-              placeholder={t('input_address')}
-              placeholderTextColor={BaseColor.grayColor}
-              onChangeText={text => {
-                address.current = text;
-              }}
-              label="Address"
-              name="address"
-              rules={{
-                required: `Address ${t('is_required')}`,
-              }}
+              placeholder={t('input_password')}
+              secureTextEntry={true}
+              selectionColor={colors.primary}
+              label="Password"
+              name="password"
+              rules={{required: `Password ${t('is_required')}`}}
+            />
+            <TextInput
+              style={[BaseStyle.textInput, {marginTop: 10}]}
+              onFocus={() => {}}
+              autoCorrect={false}
+              placeholder={t('confirm_password')}
+              secureTextEntry={true}
+              selectionColor={colors.primary}
+              label="Confirm password"
+              name="confirmPassword"
+              rules={{required: `Password ${t('is_required')}`}}
             />
           </FormProvider>
 
@@ -114,10 +112,7 @@ const SignUp = props => {
             <Button
               full
               style={{marginTop: 20}}
-              loading={loading}
-              onPress={methods.handleSubmit(() => {
-                console.log(JSON.stringify({name, email, address}));
-              })}>
+              onPress={methods.handleSubmit(onSubmit)}>
               {t('sign_up')}
             </Button>
           </View>

@@ -1,4 +1,4 @@
-import {request} from '../config/request';
+import {authRequest, request} from '../config/request';
 import withLogCatch from '../utils/withLogCatch';
 
 export const login = async (email, password) => {
@@ -18,13 +18,10 @@ export const refreshToken = async refreshToken => {
     request.post(`${endPoint}`, {refreshToken, timezone: 7}),
   );
 
-  console.log('res');
-  console.log(res);
-
   return res.data.tokens;
 };
 
-export async function getUserInfo(accessToken) {
+export const getUserInfo = async accessToken => {
   const endPoint = 'user/info';
 
   const [res, err] = await withLogCatch(
@@ -45,6 +42,7 @@ export async function getUserInfo(accessToken) {
     language,
     birthday,
     tutorInfo,
+    level
   } = res.data.user;
 
   return {
@@ -57,5 +55,43 @@ export async function getUserInfo(accessToken) {
     language,
     birthday,
     tutorInfo,
+    level
   };
-}
+};
+
+export const signUp = async (email, password) => {
+  const endPoint = 'auth/register';
+
+  const [res, err] = await withLogCatch(
+    request.post(`${endPoint}`, {email, password}),
+  );
+
+  if (err) {
+    return err.response.data;
+  }
+  return res.data;
+};
+
+export const forgotPassword = async email => {
+  const endPoint = 'user/forgotPassword';
+
+  const [res, err] = await withLogCatch(request.post(`${endPoint}`, {email}));
+
+  if (err) {
+    return err.response.data;
+  }
+  return res.data;
+};
+
+export const changePassword = async (currentPassword, newPassword) => {
+  const endPoint = 'auth/change-password';
+
+  const [res, err] = await withLogCatch(
+    authRequest.post(`${endPoint}`, {password: currentPassword, newPassword}),
+  );
+
+  if (err) {
+    return err.response.data;
+  }
+  return res.data;
+};

@@ -41,6 +41,7 @@ export const ReportTutor = () => {
         type: 'warning',
         text1: 'Report error',
         text2: 'Please enter detail problem about this tutor!',
+        visibilityTime: 500,
       });
       return;
     }
@@ -50,6 +51,7 @@ export const ReportTutor = () => {
         type: 'success',
         text1: 'Report sent',
         text2: 'We will consider the matter as soon as possible.',
+        visibilityTime: 500,
       });
       navigation.goBack();
     }

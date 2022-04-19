@@ -90,7 +90,8 @@ export default function BecomeTutor1() {
         Toast.show({
           text1: 'Action failed',
           text2: response.errorMessage,
-          type: 'danger',
+          type: 'info',
+          visibilityTime: 500,
         });
       } else {
         console.log(response.assets);

@@ -24,8 +24,6 @@ const topics = [
   {id: '12', name: 'TOEIC'},
 ];
 export default function Tutor(props) {
-  const {colors} = useTheme();
-  const [isFavorite, setIsFavorite] = useState(false);
   const {
     style,
     image,
@@ -34,10 +32,14 @@ export default function Tutor(props) {
     name,
     description,
     styleDescription,
+    isFavorite,
     onFavoriteClick = isFavorite => {},
     specialties = [],
     rating = 5,
   } = props;
+  const {colors} = useTheme();
+  const [favorite, setFavorite] = useState(isFavorite);
+  
 
   return (
     <DropShadow
@@ -95,7 +97,7 @@ export default function Tutor(props) {
             style={[
               styles.heartFavorite,
               {
-                backgroundColor: isFavorite
+                backgroundColor: favorite
                   ? BaseColor.whiteColor
                   : colors.primaryLight,
                 // backgroundColor: colors.primaryLight,
@@ -103,14 +105,14 @@ export default function Tutor(props) {
               },
             ]}
             onPress={() => {
-              onFavoriteClick(isFavorite);
-              setIsFavorite(!isFavorite);
+              onFavoriteClick(favorite);
+              setFavorite(!favorite);
             }}>
             <Icon
               solid
               name="heart"
-              size={isFavorite ? 25 : 20}
-              color={isFavorite ? colors.primaryLight : BaseColor.whiteColor}
+              size={favorite ? 25 : 20}
+              color={favorite ? colors.primaryLight : BaseColor.whiteColor}
             />
           </TouchableOpacity>
         </View>

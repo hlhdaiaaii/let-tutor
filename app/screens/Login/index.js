@@ -22,9 +22,9 @@ const SignIn = props => {
   const {t} = useTranslation();
   const {colors} = useTheme();
   const [loading, setLoading] = useState(false);
-  const email = useRef('');
-  const password = useRef('');
-  const setIsLoggedIn = useStore(state => state.setIsLoggedIn);
+  // const email = useRef('');
+  // const password = useRef('');
+  // const setIsLoggedIn = useStore(state => state.setIsLoggedIn);
   const setTokens = useStore(state => state.setTokens);
 
   const onSubmit = async ({email, password}) => {
@@ -38,7 +38,7 @@ const SignIn = props => {
     authRequest.defaults.headers.common['Authorization'] =
       'Bearer ' + tokens.access.token;
 
-    setIsLoggedIn(true);
+    // setIsLoggedIn(true);
     setTokens(tokens);
   };
 
@@ -68,9 +68,9 @@ const SignIn = props => {
               placeholder={t('input_email')}
               placeholderTextColor={BaseColor.grayColor}
               selectionColor={colors.primary}
-              onChangeText={e => {
-                email.current = e;
-              }}
+              // onChangeText={e => {
+              //   email.current = e;
+              // }}
               label="Email"
               name="email"
               rules={{
@@ -88,9 +88,9 @@ const SignIn = props => {
               placeholder={t('input_password')}
               secureTextEntry={true}
               selectionColor={colors.primary}
-              onChangeText={e => {
-                password.current = e;
-              }}
+              // onChangeText={e => {
+              //   password.current = e;
+              // }}
               label="Password"
               name="password"
               rules={{required: `Password ${t('is_required')}`}}

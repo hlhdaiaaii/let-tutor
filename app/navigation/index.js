@@ -9,11 +9,11 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StatusBar} from 'react-native';
 import {Icon} from '../components';
-import {BaseColor, BaseStyle, useDarkMode, useTheme} from '../config';
+import {BaseColor, BaseStyle, useTheme} from '../config';
 import {authRequest} from '../config/request';
 import {
   Account,
-  AccountEdit,
+  // AccountEdit,
   ChangePassword,
   Courses,
   ForgotPassword,
@@ -26,6 +26,8 @@ import BecomeTutor1 from '../screens/BecomeTutor/step1';
 import BecomeTutor2 from '../screens/BecomeTutor/step2';
 import BecomeTutor3 from '../screens/BecomeTutor/step3';
 import Booking from '../screens/Booking';
+import ChangeTheme from '../screens/ChangeTheme';
+import ChangeLanguage from '../screens/ChangeLanguage';
 import CourseDetail from '../screens/CourseDetail';
 import {ReportTutor} from '../screens/ReportTutor';
 import TutorDetail from '../screens/TutorDetail';
@@ -114,16 +116,18 @@ const MainTabNavigator = () => {
 
 export const Navigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const {colors} = useTheme();
   const tokens = useStore(state => state.tokens);
   const setTokens = useStore(state => state.setTokens);
   const setUserInfo = useStore(state => state.setUserInfo);
+  const language = useStore(state => state.language);
+  const {i18n} = useTranslation();
 
-  const state = useStore(state => state);
-  const isDarkMode = useDarkMode();
+  console.log('tokens: ', tokens);
 
-  console.log(state);
-  console.log('tokens: ' + tokens);
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -161,6 +165,8 @@ export const Navigator = () => {
           authRequest.defaults.headers.common['Authorization'] =
             'Bearer ' + tokens.access.token;
         }
+      } else {
+        setIsLoggedIn(false);
       }
     };
 
@@ -170,10 +176,10 @@ export const Navigator = () => {
   useEffect(() => {
     // Config status bar
     if (Platform.OS == 'android') {
-      StatusBar.setBackgroundColor(isDarkMode ? 'black' : 'white', true);
+      StatusBar.setBackgroundColor(colors.primary, true);
     }
-    StatusBar.setBarStyle(isDarkMode ? 'light-content' : 'dark-content', true);
-  }, [isDarkMode]);
+    StatusBar.setBarStyle('light-content', true);
+  }, [colors]);
 
   return (
     <NavigationContainer>
@@ -194,13 +200,21 @@ export const Navigator = () => {
               name={NavConfig.Stacks.Main}
               component={MainTabNavigator}
             />
-            <Root.Screen
+            {/* <Root.Screen
               name={NavConfig.Screens.AccountEdit}
               component={AccountEdit}
-            />
+            /> */}
             <Root.Screen
               name={NavConfig.Screens.ChangePassword}
               component={ChangePassword}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.ChangeTheme}
+              component={ChangeTheme}
+            />
+            <Root.Screen
+              name={NavConfig.Screens.ChangeLanguage}
+              component={ChangeLanguage}
             />
             <Root.Screen
               name={NavConfig.Screens.TutorDetail}

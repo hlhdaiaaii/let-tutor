@@ -1,112 +1,220 @@
-import {
-  Button,
-  Header,
-  Icon,
-  Image,
-  SafeAreaView,
-  Text,
-  TextInput,
-} from '../../components';
-import {BaseColor, BaseStyle, useTheme} from '../../config';
-// Load sample data
-import {UserData} from '../../mock-data';
-import React, {useEffect, useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import styles from './styles';
-import {useTranslation} from 'react-i18next';
-import {useNavigation} from '@react-navigation/native';
-import {useForm, FormProvider} from 'react-hook-form';
+// import React, {useState, useEffect} from 'react';
+// import {SafeAreaView, View, TouchableOpacity, ScrollView} from 'react-native';
 
-const AccountEdit = props => {
-  const {...methods} = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      email: UserData[0].email,
-      name: UserData[0].name,
-    },
-  });
-  const navigation = useNavigation();
-  const {t} = useTranslation();
-  const {colors} = useTheme();
-  const [id, setId] = useState(UserData[0].id);
-  const [name, setName] = useState(UserData[0].name);
-  const [email, setEmail] = useState(UserData[0].email);
-  const [address, setAddress] = useState(UserData[0].address);
-  const [image, setImage] = useState(UserData[0].image);
-  const [loading, setLoading] = useState(false);
+// import {
+//   Button,
+//   CountryPicker,
+//   DatePicker,
+//   Header,
+//   Icon,
+//   LanguagePicker,
+//   Image,
+//   Text,
+//   TextInput,
+//   TopicPicker,
+//   Loading,
+// } from '../../components';
+// import {useStore} from '../../store';
 
-  return (
-    <SafeAreaView
-      style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
-      <Header
-        title={t('edit_profile')}
-        renderLeft={() => {
-          return (
-            <Icon
-              name="angle-left"
-              size={20}
-              color={colors.primary}
-              enableRTL={true}
-            />
-          );
-        }}
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-        onPressRight={() => {}}
-      />
-      <ScrollView>
-        <FormProvider {...methods}>
-          <View style={styles.contain}>
-            <View>
-              <Image source={image} style={styles.thumb} />
-            </View>
-            <View style={styles.contentTitle}>
-              <Text headline bold>
-                {t('email')}
-              </Text>
-            </View>
-            <TextInput
-              style={BaseStyle.textInput}
-              autoCorrect={false}
-              placeholder={t('input_email')}
-              placeholderTextColor={BaseColor.grayColor}
-              name="email"
-              editable={false}
-            />
-            <View style={styles.contentTitle}>
-              <Text headline bold>
-                {t('name')}
-              </Text>
-            </View>
-            <TextInput
-              style={BaseStyle.textInput}
-              autoCorrect={false}
-              placeholder={t('input_name')}
-              placeholderTextColor={BaseColor.grayColor}
-              selectionColor={colors.primary}
-              name="name"
-              rules={{required: `Name ${t('is_required')}`}}
-            />
-          </View>
-        </FormProvider>
-      </ScrollView>
-      <View style={{padding: 20}}>
-        <Button
-          loading={loading}
-          full
-          onPress={() => {
-            setLoading(true);
-            setTimeout(() => {
-              navigation.goBack();
-            }, 500);
-          }}>
-          {t('confirm')}
-        </Button>
-      </View>
-    </SafeAreaView>
-  );
-};
+// export default function AccountEdit({navigation}) {
+//   const userInfo = useStore(state => state.userInfo);
 
-export default AccountEdit;
+//   const [name, setName] = useState(userInfo.name);
+//   const [phone, setPhone] = useState(userInfo.phone);
+//   const [birthday, setBirthday] = useState(userInfo.birthday);
+//   const [country, setCountry] = useState(userInfo.country);
+//   const [img, setImg] = useState({uri: userInfo.avatar});
+//   const [tempImg, setTeamImg] = useState(null);
+
+//   const [level, setLevel] = useState(userInfo.level);
+//   const [wantToLearn, setWantToLearn] = useState([]);
+//   const [loading, setLoading] = useState(false);
+
+//   const updateData = async () => {
+//     setLoading(true);
+//     try {
+//       const choices = getWantToLearnObject(wantToLearn);
+//       const res = await axios.put(
+//         serverUrl + 'user/info',
+//         {
+//           name,
+//           country,
+//           phone,
+//           birthday: birthday.toLocaleString().substring(0, 10),
+//           level: level.value,
+//           learnTopics: choices.topic,
+//           testPreparations: choices.preparation,
+//         },
+//         {headers: {Authorization: 'Bearer ' + userInfo.tokens.access.token}},
+//       );
+//       dispatch(setUserInfoAction(res.data.user));
+//       showMessage({type: 'success', message: 'Update successful'});
+//     } catch (error) {
+//       errorHandle(error);
+//     }
+//     setLoading(false);
+//   };
+//   useEffect(() => {
+//     getData();
+//   }, []);
+//   const editAvt = () => {
+//     launchImageLibrary(options, Response => {
+//       if (Response.didCancel) {
+//         return;
+//       } else if (Response.errorCode) {
+//         showMessage({
+//           message: 'Action failed',
+//           description: Response.errorMessage,
+//           type: 'danger',
+//         });
+//       } else {
+//         console.log(Response.assets);
+//         const result = Response.assets[0];
+//         setTeamImg(result);
+//       }
+//     });
+//   };
+//   const cancelUploadImg = () => {
+//     setTeamImg(null);
+//   };
+//   const uploadImage = async () => {
+//     setLoading(true);
+//     const res = await updateAvatar(token, tempImg);
+//     if (res) {
+//       setImg({uri: tempImg.uri});
+//       setTeamImg(null);
+//       dispatch(updateAvatarAction({avatar: tempImg.uri}));
+//     }
+//     setLoading(false);
+//   };
+//   return (
+//     <SafeAreaView style={globalStyles.container}>
+//       {loading && <LoadingIndicator />}
+//       <ReviewImage
+//         loading={loading}
+//         show={tempImg != null}
+//         imgSrc={tempImg}
+//         onCancel={cancelUploadImg}
+//         onUpdate={uploadImage}
+//       />
+//       <ScrollView>
+//         <Card>
+//           <View style={{flexDirection: 'row', alignItems: 'center'}}>
+//             <TouchableOpacity
+//               style={{
+//                 alignItems: 'center',
+//                 marginHorizontal: 10,
+//                 marginVertical: 2,
+//               }}
+//               onPress={editAvt}>
+//               <Image style={globalStyles.avt} source={img} />
+//               <View style={{flexDirection: 'row', marginTop: 4}}>
+//                 <Text style={{fontWeight: '500', color: '#3399ff'}}>Edit</Text>
+//                 <GetIcon
+//                   iconName={'edit'}
+//                   source={'AntDesign'}
+//                   size={16}
+//                   color={'#3399ff'}
+//                 />
+//               </View>
+//             </TouchableOpacity>
+//             <View style={{flex: 1}}>
+//               <Text style={globalStyles.titleName}>{userInfo.name}</Text>
+//               <Text>
+//                 <Text style={{fontWeight: '600'}}>Account id:</Text>{' '}
+//                 {userInfo.id}
+//               </Text>
+//               <Text>
+//                 <Text style={{fontWeight: '600'}}>Account type:</Text> {role}
+//               </Text>
+//             </View>
+//           </View>
+//         </Card>
+//         <Card>
+//           <TextInputCard
+//             title={'Name'}
+//             placeholder={'Enter your name'}
+//             value={name}
+//             onChangeValue={setName}
+//           />
+//           <SeperateVertical />
+
+//           <TextInputCard
+//             title={'Phone number'}
+//             keyboardType={'phone-pad'}
+//             value={phone}
+//             onChangeValue={setPhone}
+//             placeholder={'Enter your phone number'}
+//           />
+//           <SeperateVertical />
+
+//           <TextInputCard
+//             title={'Email'}
+//             placeholder={'Enter your email'}
+//             isEdit={false}
+//             value={userInfo.email}
+//           />
+//           <SeperateVertical />
+//           <MyDatePicker
+//             title={'Birthday: '}
+//             value={birthday}
+//             onChageValue={setBirthday}
+//           />
+//           <SeperateVertical />
+//           <CountryPicker value={country} didSelect={setCountry} />
+//           <SeperateVertical />
+
+//           <View
+//             style={{
+//               flex: 1,
+//               flexDirection: 'row',
+//               margin: 5,
+//               alignItems: 'center',
+//               marginVertical: 2,
+//             }}>
+//             <Text style={{fontWeight: '600', fontSize: 16, marginLeft: 5}}>
+//               My level:{' '}
+//             </Text>
+//             <Picker value={level} data={myLevels} didSelect={setLevel} />
+//           </View>
+//           <SeperateVertical />
+//           <PickWantToLearn value={wantToLearn} onChangeValue={setWantToLearn} />
+//         </Card>
+//       </ScrollView>
+//       <MyButton
+//         onPress={updateData}
+//         moreStyle={{...globalStyles.authBtnContainer, width: '69%'}}
+//         title={'Save'}
+//         moreTitleStyle={{color: 'white'}}
+//       />
+//     </SafeAreaView>
+//   );
+// }
+
+// const SeperateVertical = () => {
+//   return (
+//     <View
+//       style={{
+//         borderBottomColor: 'gray',
+//         borderBottomWidth: 0.5,
+//         margin: 10,
+//       }}></View>
+//   );
+// };
+// function getLevelItem(value) {
+//   return myLevels.find(item => item.value == value);
+// }
+
+// const options = {
+//   title: 'Select Image',
+//   customButtons: [
+//     {
+//       name: 'customOptionKey',
+//       title: 'Choose Photo from Custom Option',
+//     },
+//   ],
+//   storageOptions: {
+//     skipBackup: true,
+//     path: 'images',
+//   },
+// };

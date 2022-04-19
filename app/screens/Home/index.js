@@ -264,6 +264,7 @@ const Home = props => {
                 rating={item.rating}
                 name={item.name}
                 description={item.description}
+                isFavorite={item.isFavorite}
                 onPress={() =>
                   navigation.navigate(NavConfig.Screens.TutorDetail, {
                     id: item.id,

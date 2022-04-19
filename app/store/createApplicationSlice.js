@@ -1,12 +1,9 @@
 export const createApplicationSlice = set => ({
-  isDarkMode: false,
-  toggleTheme: () => {
-    set(state => ({isDarkMode: !state.isDarkMode}));
-  },
+  language: 'en',
+  setLanguage: language => set(state => ({...state, language})),
   setTheme: theme => set(state => ({...state, theme})),
-  theme: null,
+  theme: 'orange',
   font: null,
-  force_dark: null,
   topics: [],
   setTopics: topics => {
     set(state => ({...state, topics}));

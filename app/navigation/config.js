@@ -9,6 +9,8 @@ export const NavConfig = {
     Account: 'Account',
     AccountEdit: 'AccountEdit',
     ChangePassword: 'ChangePassword',
+    ChangeTheme: 'ChangeTheme',
+    ChangeLanguage: 'ChangeLanguage',
     TutorDetail: 'TutorDetail',
     CourseDetail: 'CourseDetail',
     Booking: 'Booking',

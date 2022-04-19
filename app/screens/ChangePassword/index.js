@@ -1,4 +1,8 @@
 import React, {useState} from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {ScrollView, View} from 'react-native';
+import Toast from 'react-native-toast-message';
 import {
   Button,
   Header,
@@ -8,10 +12,8 @@ import {
   TextInput,
 } from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {ScrollView, View} from 'react-native';
+import {changePassword} from '../../services/auth';
 import styles from './styles';
-import {useTranslation} from 'react-i18next';
-import {useForm, FormProvider} from 'react-hook-form';
 
 const ChangePassword = props => {
   const {...methods} = useForm({
@@ -21,6 +23,40 @@ const ChangePassword = props => {
   const {t} = useTranslation();
   const {colors} = useTheme();
   const [loading, setLoading] = useState(false);
+
+  const onSubmit = async ({currentPassword, newPassword, confirmPassword}) => {
+    console.log(currentPassword, newPassword, confirmPassword);
+
+    if (newPassword !== confirmPassword) {
+      Toast.show({
+        type: 'error',
+        text1: 'Change password',
+        text2: 'Confirm password is not matched',
+        visibilityTime: 500,
+      });
+      return;
+    }
+
+    const res = await changePassword(currentPassword, newPassword);
+
+    if (res.statusCode) {
+      Toast.show({
+        text1: 'Forgot password',
+        text2: res.message,
+        type: 'error',
+        visibilityTime: 500,
+      });
+    } else {
+      Toast.show({
+        text1: 'Change password',
+        text2: 'Change password successfully',
+        type: 'success',
+        visibilityTime: 500,
+      });
+
+      navigation.goBack();
+    }
+  };
 
   return (
     <SafeAreaView
@@ -94,15 +130,7 @@ const ChangePassword = props => {
         </View>
       </ScrollView>
       <View style={{padding: 20}}>
-        <Button
-          loading={loading}
-          full
-          onPress={() => {
-            setLoading(true);
-            setTimeout(() => {
-              navigation.goBack();
-            }, 500);
-          }}>
+        <Button loading={loading} full onPress={methods.handleSubmit(onSubmit)}>
           {t('confirm')}
         </Button>
       </View>

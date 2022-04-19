@@ -26,20 +26,10 @@ export const Header = props => {
     renderRight,
     barStyle,
   } = props;
-  const isDarkMode = useDarkMode();
+
   useEffect(() => {
-    let option = isDarkMode ? 'light-content' : 'dark-content';
-    if (forceDark) {
-      option = 'light-content';
-    }
-    if (forceDark == false) {
-      option = 'dark-content';
-    }
-    if (barStyle) {
-      option = barStyle;
-    }
-    StatusBar.setBarStyle(option, true);
-  }, [forceDark, isDarkMode]);
+    StatusBar.setBarStyle('light-content', true);
+  }, []);
   return (
     <View style={[styles.contain, style]}>
       <View style={[{flex: 1}, styleLeft]}>
