@@ -400,7 +400,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  levelChoice: {padding: 5, height: 30, margin: 4},
   row: {
     flexDirection: 'row',
     alignItems: 'center',

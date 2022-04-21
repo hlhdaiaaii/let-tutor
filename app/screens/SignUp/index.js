@@ -5,7 +5,7 @@ import {ScrollView, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {Button, Header, Icon, SafeAreaView, TextInput} from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {signUp} from '../../services/auth';
+import {signUp} from '../../services/user';
 import styles from './styles';
 
 const SignUp = props => {

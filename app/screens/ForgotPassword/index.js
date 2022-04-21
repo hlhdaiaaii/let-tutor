@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {ScrollView, View} from 'react-native';
 import {Button, Header, Icon, SafeAreaView, TextInput} from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {forgotPassword} from '../../services/auth';
+import {forgotPassword} from '../../services/user';
 import Toast from 'react-native-toast-message';
 
 const ForgotPassword = props => {

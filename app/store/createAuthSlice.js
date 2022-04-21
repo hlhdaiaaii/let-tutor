@@ -2,7 +2,14 @@ export const createAuthSlice = set => ({
   isLoggedIn: false,
   userInfo: null,
   setUserInfo: info => {
-    set(state => ({...state, userInfo: info}))
+    set(state => ({...state, userInfo: info}));
+  },
+
+  setUserAvatar: avatarUrl => {
+    set(state => ({
+      ...state,
+      userInfo: {...state.userInfo, avatar: avatarUrl},
+    }));
   },
   // tokens: {
   //   access: {

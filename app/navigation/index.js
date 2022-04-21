@@ -31,9 +31,10 @@ import ChangeLanguage from '../screens/ChangeLanguage';
 import CourseDetail from '../screens/CourseDetail';
 import {ReportTutor} from '../screens/ReportTutor';
 import TutorDetail from '../screens/TutorDetail';
-import {getUserInfo, refreshToken} from '../services/auth';
+import {getUserInfo, refreshToken} from '../services/user';
 import {useStore} from '../store';
 import {NavConfig} from './config';
+import AccountEdit from '../screens/AccountEdit';
 
 const Root = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -200,10 +201,10 @@ export const Navigator = () => {
               name={NavConfig.Stacks.Main}
               component={MainTabNavigator}
             />
-            {/* <Root.Screen
+            <Root.Screen
               name={NavConfig.Screens.AccountEdit}
               component={AccountEdit}
-            /> */}
+            />
             <Root.Screen
               name={NavConfig.Screens.ChangePassword}
               component={ChangePassword}

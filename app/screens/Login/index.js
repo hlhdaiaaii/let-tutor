@@ -12,7 +12,7 @@ import {Button, Header, SafeAreaView, Text, TextInput} from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
 import {authRequest} from '../../config/request';
 import {NavConfig} from '../../navigation/config';
-import {login} from '../../services/auth';
+import {login} from '../../services/user';
 import {useStore} from '../../store';
 import styles from './styles';
 

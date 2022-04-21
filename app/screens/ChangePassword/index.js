@@ -12,7 +12,7 @@ import {
   TextInput,
 } from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {changePassword} from '../../services/auth';
+import {changePassword} from '../../services/user';
 import styles from './styles';
 
 const ChangePassword = props => {

@@ -5,6 +5,7 @@ export default async function withLogCatch(promise) {
   } catch (err) {
     error = err;
     console.log('withLogCatch: ', err);
+    console.log(err.response.data);
   }
 
   return [result, error];

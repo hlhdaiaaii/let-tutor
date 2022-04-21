@@ -7,7 +7,7 @@ import {useTheme} from '../../config';
 import {topics} from '../../config/constant';
 
 export default function TopicPicker({
-  title = 'Topic want to learn',
+  title = 'Topics want to learn',
   value,
   onChangeValue,
 }) {
@@ -48,13 +48,11 @@ export default function TopicPicker({
         hideSearch
         showDropDowns={false}
         confirmText={'Pick'}
-        selectToggleIconComponent={
-          <Icon name={'angle-down'} size={18} style={{marginLeft: -210}} />
-        }
+        selectToggleIconComponent={<Icon name={'angle-down'} size={18} />}
         selectToggleTextColor={colors.primary}
         renderSelectText={() => (
-          <Text subhead bold grayColor style={{marginLeft: -225}}>
-            My specialties are
+          <Text subhead bold grayColor>
+            {title}
           </Text>
         )}
       />
@@ -64,7 +62,7 @@ export default function TopicPicker({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 3,
+    alignItems: 'flex-start',
   },
   title: {fontWeight: '500', marginLeft: 4},
   typeContainer: {
