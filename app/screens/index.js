@@ -7,3 +7,4 @@ export {default as Account} from './Account';
 export {default as Home} from './Home';
 export {default as Schedule} from './Schedule';
 export {default as Courses} from './Courses';
+export {default as CourseLesson} from './CourseLesson';

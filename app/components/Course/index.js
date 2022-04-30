@@ -1,64 +1,81 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {Text} from '../../components';
-import {BaseColor} from '../../config';
-import {ImageBackground, TouchableOpacity, View} from 'react-native';
-import styles from './styles';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, Tag, Text} from '../../components';
+import {getLevelTitle} from '../../services/course';
 
 const Course = props => {
-  const {title, image, level, nLessons, style, onPress} = props;
+  const {onPress, course} = props;
 
   return (
-    <TouchableOpacity style={style} onPress={onPress}>
-      <ImageBackground
-        source={image}
-        style={styles.imageBackground}
-        borderRadius={8}>
-        <View style={styles.viewBackground}>
-          {/* <View style={styles.viewItem}></View> */}
+    <TouchableOpacity onPress={onPress}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Image source={{uri: course.imageUrl}} style={styles.img}></Image>
+        <View
+          style={{
+            flex: 1,
+            margin: 5,
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}>
+          <Text
+            headline
+            heavy
+            lightPrimaryColor
+            numberOfLines={1}
+            style={{fontWeight: '500', fontSize: 18, margin: 3}}>
+            {course.name}
+          </Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {course.categories.map(item => (
+              <Tag
+                key={item.key}
+                outline
+                rateSmall
+                style={{
+                  // backgroundColor: BaseColor.whiteColor,
+                  marginRight: 8,
+                  height: 28,
+                }}>
+                {item.title}
+              </Tag>
+            ))}
+          </ScrollView>
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
               alignItems: 'center',
-              width: '100%',
+              marginVertical: 3,
             }}>
-            <Text title3 whiteColor bold>
-              {title}
+            <Text style={{fontWeight: '600', margin: 0}}>
+              {' '}
+              Level: {getLevelTitle(course.level)}
             </Text>
-            <View>
-              <View>
-                <Text body1 whiteColor thin>
-                  {level}
-                </Text>
-              </View>
-              <View>
-                <Text body1 whiteColor bold>
-                  {`${nLessons} lessons`}
-                </Text>
-              </View>
-            </View>
+
+            <Text> - {course.topics.length} lesson </Text>
           </View>
+          <Text
+            body1
+            grayColor
+            regular
+            style={{maxHeight: 60, fontSize: 14, margin: 3}}>
+            {course.description}
+          </Text>
         </View>
-      </ImageBackground>
+      </View>
     </TouchableOpacity>
   );
 };
 
-Course.propTypes = {
-  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  image: PropTypes.node.isRequired,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onPress: PropTypes.func,
-};
-
-Course.defaultProps = {
-  style: {},
-  name: '',
-  description: '',
-  title: '',
-  onPress: () => {},
-};
+const styles = StyleSheet.create({
+  img: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    margin: 5,
+  },
+  rating: {
+    alignSelf: 'flex-start',
+  },
+});
 
 export default Course;

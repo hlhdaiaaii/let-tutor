@@ -45,5 +45,10 @@
   "tutor_schedule": "Tutor Schedule",
   "book_lesson": "Book Lesson",
   "languages": "Languages",
-  "become_tutor": "Become Tutor"
+  "become_tutor": "Become Tutor",
+  "why_take_this_course": "Why take this course?",
+  "overview": "Overview",
+  "intro": "Intro",
+  "what_will_you_able_to_do": "What will you able to do?",
+  "lesson": "Lesson"
 }

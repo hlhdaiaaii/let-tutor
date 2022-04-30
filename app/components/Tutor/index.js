@@ -9,20 +9,6 @@ import {BaseColor, useTheme} from '../../config/theme';
 import DropShadow from 'react-native-drop-shadow';
 import Tag from '../Tag';
 
-const topics = [
-  // {id: '1', name: 'Recommended'},
-  // {id: '2', name: 'English for Kids'},
-  // {id: '3', name: 'Bussiness English'},
-  // {id: '4', name: 'Conversational Englis'},
-  // {id: '5', name: 'STARTERS'},
-  // {id: '6', name: 'MOVERS'},
-  // {id: '7', name: 'FLYERS'},
-  {id: '8', name: 'KET'},
-  {id: '9', name: 'PET'},
-  {id: '10', name: 'IELTS'},
-  {id: '11', name: 'TOEFL'},
-  {id: '12', name: 'TOEIC'},
-];
 export default function Tutor(props) {
   const {
     style,
@@ -39,7 +25,6 @@ export default function Tutor(props) {
   } = props;
   const {colors} = useTheme();
   const [favorite, setFavorite] = useState(isFavorite);
-  
 
   return (
     <DropShadow

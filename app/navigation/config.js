@@ -13,6 +13,7 @@ export const NavConfig = {
     ChangeLanguage: 'ChangeLanguage',
     TutorDetail: 'TutorDetail',
     CourseDetail: 'CourseDetail',
+    CourseLesson: 'CourseLesson',
     Booking: 'Booking',
     ReportTutor: 'ReportTutor',
     BecomeTutor1: 'BecomeTutor1',

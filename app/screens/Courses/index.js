@@ -1,133 +1,28 @@
-import React, {useState, useRef} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useRef, useState} from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {
+  Animated,
+  FlatList,
+  Platform,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import DropShadow from 'react-native-drop-shadow';
+import Logo from '../../assets/images/logo.svg';
 import {
   Course,
   Header,
   Icon,
   SafeAreaView,
   Tag,
-  Text,
   TextInput,
-  Tutor,
 } from '../../components';
-import Logo from '../../assets/images/logo.svg';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
-import {useTranslation} from 'react-i18next';
-import {
-  ActivityIndicator,
-  Keyboard,
-  TouchableOpacity,
-  View,
-  FlatList,
-  Animated,
-  Platform,
-} from 'react-native';
-import styles from './styles';
-import {FormProvider, useForm} from 'react-hook-form';
-import {useNavigation} from '@react-navigation/native';
-import DropShadow from 'react-native-drop-shadow';
 import {NavConfig} from '../../navigation/config';
-
-const topics = [
-  {id: '1', keyword: 'Recommended'},
-  {id: '2', keyword: 'English for Kids'},
-  {id: '3', keyword: 'Bussiness English'},
-  {id: '4', keyword: 'Conversational Englis'},
-  {id: '5', keyword: 'STARTERS'},
-  {id: '6', keyword: 'MOVERS'},
-  {id: '7', keyword: 'FLYERS'},
-  {id: '8', keyword: 'KET'},
-  {id: '9', keyword: 'PET'},
-  {id: '10', keyword: 'IELTS'},
-  {id: '11', keyword: 'TOEFL'},
-  {id: '12', keyword: 'TOEIC'},
-];
-
-const courses = [
-  {
-    id: 1,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 2,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 3,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 4,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 5,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 6,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 7,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 8,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 9,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 10,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 11,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-  {
-    id: 12,
-    title: 'What is Ethereum?',
-    level: 'Intermediate',
-    nLessons: 9,
-    image: require('../../assets/images/course-1.jpg'),
-  },
-];
+import {getCourseCates, getCourses} from '../../services/course';
+import styles from './styles';
 
 const Courses = props => {
   const {...methods} = useForm({
@@ -136,7 +31,6 @@ const Courses = props => {
   const navigation = useNavigation();
   const {t} = useTranslation();
   const {colors} = useTheme();
-  const [chosenTopicId, setChosenTopicId] = useState(topics[0].id);
 
   const scrollAnim = useRef(new Animated.Value(0)).current;
   const offsetAnim = useRef(new Animated.Value(0)).current;
@@ -160,6 +54,59 @@ const Courses = props => {
     outputRange: [0, -40],
     extrapolate: 'clamp',
   });
+
+  const [courses, setCourses] = useState([]);
+  const [cates, setCates] = useState([]);
+  const [page, setPage] = useState(1);
+  const perPage = 5;
+
+  const [chosenCate, setChosenCate] = useState({});
+  const [searchKeyword, setSearchKeyword] = useState('');
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const data = await getCourses({page, size: perPage});
+
+      setCourses(data.rows);
+    };
+
+    fetchCourses();
+  }, []);
+
+  useEffect(() => {
+    const fetchCates = async () => {
+      const data = await getCourseCates();
+
+      setCates(data);
+    };
+
+    fetchCates();
+  }, []);
+
+  const search = async () => {
+    console.log('chosenCate', chosenCate);
+
+    const params = {size: perPage, q: searchKeyword};
+
+    if (chosenCate.id) params.categoryId = [chosenCate.id];
+
+    const data = await getCourses(params);
+    setCourses(data.rows);
+  };
+
+  useEffect(() => {
+    console.log('search keyword: ' + searchKeyword);
+
+    const timeoutRef = setTimeout(() => {
+      search();
+    }, 300);
+
+    return () => clearTimeout(timeoutRef);
+  }, [searchKeyword]);
+
+  useEffect(() => {
+    search();
+  }, [chosenCate]);
 
   return (
     <SafeAreaView
@@ -195,13 +142,11 @@ const Courses = props => {
             // />
             <Course
               onPress={() =>
-                navigation.navigate(NavConfig.Screens.CourseDetail)
+                navigation.navigate(NavConfig.Screens.CourseDetail, {
+                  data: item,
+                })
               }
-              style={{marginBottom: 10}}
-              image={item.image}
-              title={item.title}
-              level={item.level}
-              nLessons={item.nLessons}
+              course={item}
             />
           )}
           scrollEventThrottle={1}
@@ -243,8 +188,16 @@ const Courses = props => {
                     placeholderTextColor={BaseColor.grayColor}
                     selectionColor={colors.primary}
                     name="search"
+                    onChangeText={text => {
+                      setSearchKeyword(text);
+                    }}
                   />
-                  <TouchableOpacity style={styles.btnClearSearch}>
+                  <TouchableOpacity
+                    style={styles.btnClearSearch}
+                    onPress={() => {
+                      methods.reset();
+                      setSearchKeyword('');
+                    }}>
                     <Icon name="times" size={18} color={BaseColor.grayColor} />
                   </TouchableOpacity>
                 </FormProvider>
@@ -252,28 +205,21 @@ const Courses = props => {
               </DropShadow>
             </View>
             <View style={{marginHorizontal: 12}}>
-              {/* <View style={styles.rowTitle}>
-                <Text title3 bold>
-                  {t('topics')}
-                </Text>
-              </View> */}
               <FlatList
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                data={topics}
-                keyExtractor={(item, index) => item.id}
+                data={cates}
+                keyExtractor={(item, index) => item.key}
                 renderItem={({item, index}) => (
                   <Tag
-                    key={item.id}
-                    primary={item.id === chosenTopicId}
-                    outline={!(item.id === chosenTopicId)}
+                    primary={item.key === chosenCate.key}
+                    outline={!(item.key === chosenCate.key)}
                     style={{
-                      // backgroundColor: BaseColor.whiteColor,
                       marginRight: 8,
                       height: 28,
                     }}
-                    onPress={() => setChosenTopicId(item.id)}>
-                    {item.keyword}
+                    onPress={() => setChosenCate(item)}>
+                    {item.title}
                   </Tag>
                 )}
               />

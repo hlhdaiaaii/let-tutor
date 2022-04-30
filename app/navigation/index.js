@@ -15,6 +15,7 @@ import {
   Account,
   // AccountEdit,
   ChangePassword,
+  CourseLesson,
   Courses,
   ForgotPassword,
   Home,
@@ -225,6 +226,11 @@ export const Navigator = () => {
               name={NavConfig.Screens.CourseDetail}
               component={CourseDetail}
             />
+            <Root.Screen
+              name={NavConfig.Screens.CourseLesson}
+              component={CourseLesson}
+            />
+
             <Root.Screen name={NavConfig.Screens.Booking} component={Booking} />
             <Root.Screen
               name={NavConfig.Screens.ReportTutor}

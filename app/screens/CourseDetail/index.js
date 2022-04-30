@@ -1,88 +1,29 @@
-import {
-  Header,
-  Icon,
-  SafeAreaView,
-  Tag,
-  Text,
-  Image,
-  Button,
-} from '../../components';
-import {BaseColor, BaseStyle, useTheme} from '../../config';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {
-  TouchableOpacity,
   Dimensions,
-  View,
   FlatList,
   ScrollView,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import styles from './styles';
-import Review from '../../components/Review';
-import {AirbnbRating} from 'react-native-ratings';
-
-const topics = [
-  {id: '1', keyword: 'Recommended'},
-  {id: '2', keyword: 'English for Kids'},
-  {id: '3', keyword: 'Bussiness English'},
-  {id: '4', keyword: 'Conversational Englis'},
-  {id: '5', keyword: 'STARTERS'},
-  {id: '6', keyword: 'MOVERS'},
-  {id: '7', keyword: 'FLYERS'},
-  {id: '8', keyword: 'KET'},
-  {id: '9', keyword: 'PET'},
-  {id: '10', keyword: 'IELTS'},
-  {id: '11', keyword: 'TOEFL'},
-  {id: '12', keyword: 'TOEIC'},
-];
-
-const course = {
-  id: 1,
-  title: 'What is Ethereum?',
-  level: 'Intermediate',
-  nLessons: 9,
-  image: require('../../assets/images/course-1.jpg'),
-  description:
-    'Commodo pariatur minim consectetur irure. Amet cupidatat sint nulla quis culpa nulla consequat dolor adipisicing tempor. In amet nostrud proident Lorem enim esse aliqua minim pariatur Lorem. Deserunt labore minim voluptate enim mollit culpa occaecat ea nulla irure. Laborum occaecat voluptate nisi elit tempor eiusmod incididunt dolore nostrud labore deserunt nostrud enim. Nisi non anim anim eiusmod deserunt nulla et minim nulla ut commodo. Mollit proident laborum enim eiusmod ut ad ex fugiat.',
-};
-
-const lessons = [
-  {
-    id: 1,
-    title: 'Lesson 1',
-  },
-  {
-    id: 2,
-    title: 'Lesson 1',
-  },
-  {
-    id: 3,
-    title: 'Lesson 1',
-  },
-  {
-    id: 4,
-    title: 'Lesson 1',
-  },
-  {
-    id: 5,
-    title: 'Lesson 1',
-  },
-  {
-    id: 6,
-    title: 'Lesson 1',
-  },
-  {
-    id: 7,
-    title: 'Lesson 1',
-  },
-];
+import {Header, Icon, Image, SafeAreaView, Tag, Text} from '../../components';
+import {BaseColor, BaseStyle, useTheme} from '../../config';
+import {NavConfig} from '../../navigation/config';
+import {getListTag} from '../../services/course';
 
 const CourseDetail = () => {
   const {t} = useTranslation();
   const {colors} = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
+  const {data: course} = route.params;
+
+  course.topics = sortTopicsByOrder(course.topics);
+  const listTag = getListTag(course.categories);
+
+  console.log('listTag', listTag);
 
   return (
     <SafeAreaView
@@ -111,7 +52,7 @@ const CourseDetail = () => {
             padding: 20,
           }}>
           <Image
-            source={course.image}
+            source={{uri: course.imageUrl}}
             style={{
               borderRadius: 10,
               width: '100%',
@@ -129,6 +70,25 @@ const CourseDetail = () => {
               {course.description}
             </Text>
           </View>
+
+          <View style={{marginTop: 20}}>
+            <Text title2 primaryColor>
+              {t('why_take_this_course')}
+            </Text>
+            <Text body2 regular style={{marginTop: 10}}>
+              {course.reason}
+            </Text>
+          </View>
+
+          <View style={{marginTop: 20}}>
+            <Text title2 primaryColor>
+              {t('what_will_you_able_to_do')}
+            </Text>
+            <Text body2 regular style={{marginTop: 10}}>
+              {course.purpose}
+            </Text>
+          </View>
+
           <View style={{marginTop: 20}}>
             <Text title2 primaryColor>
               {t('topics')}
@@ -137,18 +97,17 @@ const CourseDetail = () => {
               contentContainerStyle={{marginTop: 10}}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              data={topics}
-              keyExtractor={(item, index) => index}
+              data={listTag}
+              keyExtractor={(item, index) => item}
               renderItem={({item, index}) => (
                 <Tag
-                  key={index}
                   outline
                   style={{
                     // backgroundColor: BaseColor.whiteColor,
                     marginRight: 8,
                     height: 28,
                   }}>
-                  {item.keyword}
+                  {item}
                 </Tag>
               )}
             />
@@ -158,8 +117,14 @@ const CourseDetail = () => {
               {t('lessons')}
             </Text>
           </View>
-          {lessons.map(e => (
-            <View
+          {course.topics.map(e => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(NavConfig.Screens.CourseLesson, {
+                  fileUrl: e.nameFile,
+                });
+              }}
+              key={e.id}
               style={{
                 // width: '80%',
                 flexDirection: 'row',
@@ -172,14 +137,17 @@ const CourseDetail = () => {
                 backgroundColor: BaseColor.whiteColor,
               }}>
               <Text headline light>
-                {e.title}
+                {' '}
+                {e.orderCourse + 1}. {e.name}
               </Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-
+function sortTopicsByOrder(topics) {
+  return topics.sort((a, b) => a.orderCourse - b.orderCourse);
+}
 export default CourseDetail;
