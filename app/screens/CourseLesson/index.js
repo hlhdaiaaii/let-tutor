@@ -12,6 +12,8 @@ const CourseLesson = () => {
   const route = useRoute();
   const {fileUrl} = route.params;
 
+  console.log(fileUrl.replace(/\s/g, '%20'));
+
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, {flex: 1}]}

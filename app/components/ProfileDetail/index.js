@@ -1,10 +1,9 @@
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import Icon from '../../components/Icon';
 import Image from '../../components/Image';
 import Text from '../../components/Text';
-import {BaseColor, useTheme} from '../../config';
-import PropTypes from 'prop-types';
-import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import { BaseColor, useTheme } from '../../config';
 import styles from './styles';
 
 export default function ProfileDetail(props) {
@@ -61,29 +60,3 @@ export default function ProfileDetail(props) {
     </TouchableOpacity>
   );
 }
-
-ProfileDetail.propTypes = {
-  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  image: PropTypes.node.isRequired,
-  textFirst: PropTypes.string,
-  textSecond: PropTypes.string,
-  textThird: PropTypes.string,
-  styleLeft: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  styleThumb: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  styleRight: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  icon: PropTypes.bool,
-  onPress: PropTypes.func,
-};
-
-ProfileDetail.defaultProps = {
-  image: '',
-  textFirst: '',
-  textSecond: '',
-  icon: true,
-  point: '',
-  style: {},
-  styleLeft: {},
-  styleThumb: {},
-  styleRight: {},
-  onPress: () => {},
-};

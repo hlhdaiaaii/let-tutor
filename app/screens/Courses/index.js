@@ -18,6 +18,7 @@ import {
   SafeAreaView,
   Tag,
   TextInput,
+  Loading,
 } from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
 import {NavConfig} from '../../navigation/config';
@@ -58,20 +59,34 @@ const Courses = props => {
   const [courses, setCourses] = useState([]);
   const [cates, setCates] = useState([]);
   const [page, setPage] = useState(1);
+  const [canLoadMore, setCanLoadMore] = useState(true);
   const perPage = 5;
+  const totalCount = useRef(0);
 
-  const [chosenCate, setChosenCate] = useState({});
+  const [chosenCate, setChosenCate] = useState({key: ''});
   const [searchKeyword, setSearchKeyword] = useState('');
+  const isSearching = useRef(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const data = await getCourses({page, size: perPage});
+      const params = {size: perPage, q: searchKeyword, page};
+      if (chosenCate.id) params.categoryId = [chosenCate.id];
 
-      setCourses(data.rows);
+      const data = await getCourses(params);
+
+      console.log('data', data);
+
+      setCourses(prev => [...prev, ...data.rows]);
+      totalCount.current = data.count;
+      if (perPage * page >= totalCount.current) {
+        setCanLoadMore(false);
+      }
     };
 
-    fetchCourses();
-  }, []);
+    console.log('isSearching', isSearching);
+    console.log('canLoadMore', canLoadMore);
+    if (!isSearching.current && canLoadMore) fetchCourses();
+  }, [page, canLoadMore]);
 
   useEffect(() => {
     const fetchCates = async () => {
@@ -85,20 +100,25 @@ const Courses = props => {
 
   const search = async () => {
     console.log('chosenCate', chosenCate);
-
-    const params = {size: perPage, q: searchKeyword};
+    isSearching.current = true;
+    setPage(1);
+    setCanLoadMore(true);
+    const params = {size: perPage, q: searchKeyword, page: 1};
 
     if (chosenCate.id) params.categoryId = [chosenCate.id];
 
     const data = await getCourses(params);
     setCourses(data.rows);
+    isSearching.current = false;
   };
 
   useEffect(() => {
     console.log('search keyword: ' + searchKeyword);
 
     const timeoutRef = setTimeout(() => {
-      search();
+      if (searchKeyword !== '') {
+        search();
+      }
     }, 300);
 
     return () => clearTimeout(timeoutRef);
@@ -124,6 +144,11 @@ const Courses = props => {
       />
       <View>
         <Animated.FlatList
+          ListFooterComponent={canLoadMore ? Loading : null}
+          onEndReachedThreshold={0.2}
+          onEndReached={() => {
+            if (canLoadMore) setPage(prev => prev + 1);
+          }}
           showsVerticalScrollIndicator={false}
           contentInset={{top: 50}}
           data={courses}
@@ -134,12 +159,6 @@ const Courses = props => {
           }}
           keyExtractor={(item, index) => item.id}
           renderItem={({item, index}) => (
-            // <Tutor
-            //   image={item.avatar}
-            //   name={item.name}
-            //   description={item.description}
-            //   onPress={() => navigation.navigate(NavConfig.Screens.TutorDetail)}
-            // />
             <Course
               onPress={() =>
                 navigation.navigate(NavConfig.Screens.CourseDetail, {

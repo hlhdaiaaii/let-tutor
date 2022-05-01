@@ -50,5 +50,10 @@
   "overview": "Overview",
   "intro": "Intro",
   "what_will_you_able_to_do": "What will you able to do?",
-  "lesson": "Lesson"
+  "lesson": "Lesson",
+  "cancel": "Cancel",
+  "go_to_meeting": "Go to meeting",
+  "hours": "hours",
+  "minutes": "minutes",
+  "upcoming_lesson": "Upcoming lesson"
 }

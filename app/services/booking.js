@@ -32,3 +32,13 @@ export const bookLesson = async (scheduleDetailIds, note) => {
 
   return res.data;
 };
+
+export const cancelLesson = async scheduleDetailIds => {
+  const endPoint = 'booking';
+
+  const [res, err] = await withLogCatch(
+    authRequest.delete(`${endPoint}`, {data: {scheduleDetailIds}}),
+  );
+
+  return res.data;
+};
