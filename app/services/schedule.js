@@ -26,3 +26,20 @@ export const getTotalLearnedTime = async () => {
 
   return res.data.total;
 };
+
+export const getHistorySchedule = async (page, perPage) => {
+  const endPoint = 'booking/list/student';
+
+  const [res, err] = await withLogCatch(
+    authRequest.get(`${endPoint}`, {
+      params: {
+        page,
+        perPage,
+        dateTimeLte: moment().valueOf(),
+        orderBy: 'meeting',
+        sortBy: 'desc',
+      },
+    }),
+  );
+  return res.data.data;
+};

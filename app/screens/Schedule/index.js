@@ -31,8 +31,6 @@ const Upcoming = ({item, navigation, refetchCb}) => {
   const startTime = moment(item.scheduleDetailInfo.startPeriodTimestamp);
   // const date = new Date(scheduleInfo.date);
 
-  console.log('scheduleInfo', scheduleInfo);
-
   const goToMeeting = () => {
     navigation.navigate(NavConfig.Screens.Meeting, {
       data: item,
@@ -226,6 +224,7 @@ const Schedule = () => {
           refreshing={false}
           onRefresh={() => {
             setPage(1);
+            fetchSchedule();
           }}
           showsVerticalScrollIndicator={false}
           contentInset={{top: 50}}

@@ -27,56 +27,6 @@ import {getTitlesAndHeads} from '../../utils/booking';
 import styles from './styles';
 import Video from 'react-native-video';
 
-// const tutor = {
-//   id: '1',
-//   name: 'Alicia Mave',
-//   nation: 'Canada',
-//   role: 'English Tutor',
-//   avatar: require('../../assets/images/profile-5.jpg'),
-//   specialties: ['KET', 'PET', 'IELTS', 'Business English'],
-//   description:
-//     'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-// };
-
-// const reviews = [
-//   {
-//     id: 1,
-//     name: 'Emma Stone',
-//     review:
-//       'Lorem velit enim adipisicing excepteur enim occaecat culpa anim. Velit sint dolore culpa consectetur. Est cillum ea sunt do sint sint duis duis non enim ex nostrud pariatur. Qui deserunt ex incididunt pariatur laboris. Do amet nostrud anim officia sint reprehenderit incididunt tempor consequat occaecat irure duis Lorem.',
-//     rate: 4,
-//     createdAt: '2022-05-05',
-//     avatar: require('../../assets/images/profile-4.jpg'),
-//   },
-//   {
-//     id: 2,
-//     name: 'Emma Stone',
-//     review:
-//       'Lorem velit enim adipisicing excepteur enim occaecat culpa anim. Velit sint dolore culpa consectetur. Est cillum ea sunt do sint sint duis duis non enim ex nostrud pariatur. Qui deserunt ex incididunt pariatur laboris. Do amet nostrud anim officia sint reprehenderit incididunt tempor consequat occaecat irure duis Lorem.',
-//     rate: 4,
-//     createdAt: '2022-05-05',
-//     avatar: require('../../assets/images/profile-4.jpg'),
-//   },
-//   {
-//     id: 3,
-//     name: 'Emma Stone',
-//     review:
-//       'Lorem velit enim adipisicing excepteur enim occaecat culpa anim. Velit sint dolore culpa consectetur. Est cillum ea sunt do sint sint duis duis non enim ex nostrud pariatur. Qui deserunt ex incididunt pariatur laboris. Do amet nostrud anim officia sint reprehenderit incididunt tempor consequat occaecat irure duis Lorem.',
-//     rate: 4,
-//     createdAt: '2022-05-05',
-//     avatar: require('../../assets/images/profile-4.jpg'),
-//   },
-//   {
-//     id: 4,
-//     name: 'Emma Stone',
-//     review:
-//       'Lorem velit enim adipisicing excepteur enim occaecat culpa anim. Velit sint dolore culpa consectetur. Est cillum ea sunt do sint sint duis duis non enim ex nostrud pariatur. Qui deserunt ex incididunt pariatur laboris. Do amet nostrud anim officia sint reprehenderit incididunt tempor consequat occaecat irure duis Lorem.',
-//     rate: 4,
-//     createdAt: '2022-05-05',
-//     avatar: require('../../assets/images/profile-4.jpg'),
-//   },
-// ];
-
 const TutorDetail = () => {
   const {t} = useTranslation();
   const {colors} = useTheme();
@@ -176,7 +126,7 @@ const TutorDetail = () => {
             keyExtractor={(item, index) => item.id}
             ListHeaderComponent={() => (
               <View style={{marginBottom: 10}}>
-                {/* <View>
+                <View>
                   <Video
                     source={{
                       uri: tutor.video,
@@ -192,7 +142,7 @@ const TutorDetail = () => {
                     repeat={false}
                     resizeMode={'contain'}
                   />
-                </View> */}
+                </View>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image
                     source={{
@@ -322,11 +272,30 @@ const TutorDetail = () => {
                   </Text>
 
                   {tutorScheduleShow ? (
-                    <TableBooking
-                      data={tutorScheduleShow}
-                      tutor={tutor}
-                      page={schedulePage}
-                    />
+                    <>
+                      <View style={{flexDirection: 'row'}}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSchedulePage(prev => prev - 1);
+                          }}
+                          disabled={schedulePage == 1}>
+                          <Icon name="angle-left" size={30} />
+                        </TouchableOpacity>
+                        <View style={{width: 50}}></View>
+                        <TouchableOpacity
+                          onPress={() => {
+                            console.log('press');
+                            setSchedulePage(prev => prev + 1);
+                          }}>
+                          <Icon name="angle-right" size={30} />
+                        </TouchableOpacity>
+                      </View>
+                      <TableBooking
+                        data={tutorScheduleShow}
+                        tutor={tutor}
+                        page={schedulePage}
+                      />
+                    </>
                   ) : (
                     <View>
                       <Loading />

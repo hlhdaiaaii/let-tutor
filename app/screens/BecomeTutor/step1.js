@@ -25,6 +25,7 @@ import {
   TopicPicker,
 } from '../../components';
 import {BaseColor, BaseStyle, useTheme} from '../../config';
+import {NavConfig} from '../../navigation/config';
 
 export default function BecomeTutor1() {
   const navigation = useNavigation();
@@ -58,24 +59,22 @@ export default function BecomeTutor1() {
     console.log('become tutor data');
     console.log(data);
 
-    // console.log(checkInput);
-    // if (!checkInput()) return;
-    // navigation.navigate('BecomeTutor2', {
-    //   data: {
-    //     avatar,
-    //     country,
-    //     birthday: birthday.toLocaleDateString(),
-    //     specialties: topics,
-    //     languages,
+    navigation.navigate(NavConfig.Screens.BecomeTutor2, {
+      data: {
+        avatar,
+        country,
+        birthday: birthday.toLocaleDateString(),
+        specialties: topics,
+        languages,
 
-    //     // education,
-    //     // interests,
-    //     // experience,
-    //     // profession,
-    //     // bio,
-    //     // targetStudent,
-    //   },
-    // });
+        // education,
+        // interests,
+        // experience,
+        // profession,
+        // bio,
+        // targetStudent,
+      },
+    });
   };
 
   const chooseTargetStudent = value => {

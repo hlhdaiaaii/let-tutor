@@ -21,6 +21,7 @@ export const NavConfig = {
     BecomeTutor3: 'BecomeTutor3',
     Meeting: 'Meeting',
     ClassHistory: 'ClassHistory',
+    Meeting: 'Meeting',
   },
   Stacks: {
     Auth: 'AuthStack',

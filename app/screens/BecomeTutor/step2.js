@@ -32,12 +32,12 @@ export default function BecomeTutor2() {
     launchImageLibrary(
       {
         mediaType: 'video',
-        durationLimit: 360,
+        // durationLimit: 360,
       },
       response => {
         if (response.didCancel) {
           return;
-        } else if (response.errorCode) {
+        } else if (response) {
           console.log(response.errorMessage);
           Toast.show({
             text1: 'Action failed',

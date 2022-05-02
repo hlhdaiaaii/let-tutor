@@ -36,6 +36,8 @@ import {getUserInfo, refreshToken} from '../services/user';
 import {useStore} from '../store';
 import {NavConfig} from './config';
 import AccountEdit from '../screens/AccountEdit';
+import ClassHistory from '../screens/ClassHistory';
+import Meeting from '../screens/Meeting';
 
 const Root = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -218,6 +220,7 @@ export const Navigator = () => {
               name={NavConfig.Screens.ChangeLanguage}
               component={ChangeLanguage}
             />
+            <Root.Screen name={NavConfig.Screens.Meeting} component={Meeting} />
             <Root.Screen
               name={NavConfig.Screens.TutorDetail}
               component={TutorDetail}
@@ -229,6 +232,11 @@ export const Navigator = () => {
             <Root.Screen
               name={NavConfig.Screens.CourseLesson}
               component={CourseLesson}
+            />
+
+            <Root.Screen
+              name={NavConfig.Screens.ClassHistory}
+              component={ClassHistory}
             />
 
             <Root.Screen name={NavConfig.Screens.Booking} component={Booking} />
